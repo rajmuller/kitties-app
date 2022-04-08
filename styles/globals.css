@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+  font-family: 'Mouse Memoirs', sans-serif;
+}
+
+@layer components {
+  .head-text {
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-align: center;
+    @apply text-black;
+    @apply capitalize;
+  }
+}
