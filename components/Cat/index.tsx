@@ -1,58 +1,50 @@
 const Cat = () => {
   return (
-    <div className="cat z-50">
-      <div className="ears">
-        <div className="ear left_ear">
-          <div className="inner_ear left_inner_ear"></div>
+    <div className="cat">
+      <div className="cat__ear">
+        <div id="leftEar" className="cat__ear--left">
+          <div className="cat__ear--left-inside"></div>
         </div>
-        <div className="ear right_ear">
-          <div className="inner_ear right_inner_ear"></div>
+        <div id="rightEar" className="cat__ear--right">
+          <div className="cat__ear--right-inside"></div>
         </div>
       </div>
-      <div className="head">
-        <div className="eyes">
-          <div className="eye left_eye left-[34px]">
-            <div className="irus"></div>
 
-            <div className="reflection_1"></div>
-            <div className="reflection_2"></div>
+      <div id="head" className="cat__head">
+        <div id="midDot" className="cat__head-dots">
+          <div id="leftDot" className="cat__head-dots_first"></div>
+          <div id="rightDot" className="cat__head-dots_second"></div>
+        </div>
+        <div className="cat__eye">
+          <div className="cat__eye--left">
+            <span className="pupil-left"></span>
           </div>
-          <div className="eye right_eye left-[90px]">
-            <div className="irus"></div>
+          <div className="cat__eye--right">
+            <span className="pupil-right"></span>
+          </div>
+        </div>
+        <div className="cat__nose"></div>
 
-            <div className="reflection_1"></div>
-            <div className="reflection_2"></div>
-          </div>
-        </div>
-        <div className="snout"></div>
-        <div className="nose"></div>
-        <div className="mouth-left"></div>
-        <div className="mouth-right"></div>
-        <div className="forehead_markings_middle"></div>
-        <div className="forehead_markings_left"></div>
-        <div className="forehead_markings_right"></div>
-        <div className="whisker whisker_mid_left"></div>
-        <div className="whisker whisker_top_left"></div>
-        <div className="whisker whisker_bottom_left"></div>
-        <div className="whisker whisker_mid_right"></div>
-        <div className="whisker whisker_top_right"></div>
-        <div className="whisker whisker_bottom_right"></div>
-        <div className="chest"></div>
-        <div className="stomach"></div>
-        <div className="paw_front_left">
-          <div className="paw_stripe"></div>
-          <div className="paw_stripe bottom_stripe"></div>
-        </div>
-        <div className="paw_front_right">
-          <div className="paw_stripe"></div>
-          <div className="paw_stripe bottom_stripe"></div>
-        </div>
-        <div className="paw_back_right"></div>
-        <div className="paw_back_left"></div>
-        <div className="tail">
-          <div className="tail_markings top_marking"></div>
-          <div className="tail_markings bottom_marking"></div>
-        </div>
+        <div className="cat__mouth-contour"></div>
+        <div className="cat__mouth-left"></div>
+        <div className="cat__mouth-right"></div>
+
+        <div className="cat__whiskers-left"></div>
+        <div className="cat__whiskers-right"></div>
+      </div>
+
+      <div className="cat__body">
+        <div className="cat__chest"></div>
+
+        <div className="cat__chest_inner"></div>
+
+        <div className="cat__paw-left"></div>
+        <div className="cat__paw-left_inner"></div>
+
+        <div className="cat__paw-right"></div>
+        <div className="cat__paw-right_inner"></div>
+
+        <div id="tail" className="cat__tail"></div>
       </div>
     </div>
   );
