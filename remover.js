@@ -13,7 +13,15 @@ let layersFolder = fs.readdirSync(`${basePath}/layers`);
 layersFolder.forEach((folder) => {
   const layer = fs.readdirSync(`${basePath}/layers/${folder}`);
   layer.forEach((file) => {
-    console.log({ file });
+    const newName = `${file.split("#").shift()}.png`;
+    const fileUri = fs.rename(
+      `${basePath}/layers/${folder}/${file}`,
+      `${basePath}/layers/${folder}/${newName}`,
+      function (err) {
+        if (err) throw err;
+        console.log("File Renamed!");
+      }
+    );
   });
 });
 
