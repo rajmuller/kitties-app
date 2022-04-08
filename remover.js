@@ -8,20 +8,21 @@ const fs = require("fs");
 console.log(path.join(basePath, "/src/config.js"));
 
 // read json data
-let layersFolder = fs.readdirSync(`${basePath}/layers`);
+let layersFolder = fs.readdirSync(`${basePath}/public/layers`);
 
 layersFolder.forEach((folder) => {
-  const layer = fs.readdirSync(`${basePath}/layers/${folder}`);
-  layer.forEach((file) => {
-    const newName = `${file.split("#").shift()}.png`;
+  const layer = fs.readdirSync(`${basePath}/public/layers/${folder}`);
+  layer.forEach((file, i) => {
+    const newName = `${i}.png`;
     const fileUri = fs.rename(
-      `${basePath}/layers/${folder}/${file}`,
-      `${basePath}/layers/${folder}/${newName}`,
+      `${basePath}/public/layers/${folder}/${file}`,
+      `${basePath}/public/layers/${folder}/${newName}`,
       function (err) {
         if (err) throw err;
         console.log("File Renamed!");
       }
     );
+    console.log({ newName });
   });
 });
 
