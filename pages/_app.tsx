@@ -1,9 +1,19 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import "@fontsource/mouse-memoirs"
+import "@fontsource/mouse-memoirs";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import "../styles/cat.css";
+import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  return (
+    <>
+      <Head>
+        <title>Kitties</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Component {...pageProps} />;
+    </>
+  );
+};
 
-export default MyApp
+export default MyApp;
