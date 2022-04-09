@@ -6,13 +6,13 @@ import { DNA } from "../types";
 const Factory: NextPage = () => {
   const [dna, setDna] = useState<DNA>({
     bodyColor: "10",
-    mouthTailColor: "0",
-    eyeColor: "0",
-    earPawColor: "0",
-    eyeShape: "0",
-    pattern: "0",
-    patternColor: "0",
-    animation: "0",
+    mouthTailColor: "10",
+    eyeColor: "10",
+    earPawColor: "10",
+    eyeShape: "10",
+    pattern: "10",
+    patternColor: "10",
+    animation: "10",
   });
   const [tab, setTab] = useState<"colors" | "cattributes">("colors");
 
@@ -27,7 +27,7 @@ const Factory: NextPage = () => {
 
   return (
     <div className=" flex h-screen w-full flex-wrap items-center justify-center gap-16">
-      <div className="relative flex items-center justify-center rounded-2xl bg-slate-300 p-32">
+      <div className="relative flex items-center justify-center rounded-2xl bg-slate-300 p-32 shadow-2xl">
         <Cat
           bodyColor={dna.bodyColor}
           mouthTailColor={dna.mouthTailColor}
@@ -43,7 +43,7 @@ const Factory: NextPage = () => {
         </p>
       </div>
 
-      <div className="rounded-2xl bg-slate-200 p-8 ">
+      <div className="rounded-2xl bg-slate-200 p-8 shadow-2xl">
         <p className="mb-4 text-4xl">Factory</p>
         <div className="mb-8 flex w-full">
           <button
@@ -106,7 +106,7 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.mouthTailColor}
                   onChange={onChange}
-                  min="0"
+                  min="10"
                   max="99"
                   id="mouthTailColor"
                   type="range"
@@ -125,7 +125,7 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.eyeColor}
                   onChange={onChange}
-                  min="0"
+                  min="10"
                   max="99"
                   id="eyeColor"
                   type="range"
@@ -144,7 +144,7 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.earPawColor}
                   onChange={onChange}
-                  min="0"
+                  min="10"
                   max="99"
                   id="earPawColor"
                   type="range"
@@ -165,8 +165,8 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.eyeShape}
                   onChange={onChange}
-                  min="0"
-                  max="9"
+                  min="10"
+                  max="19"
                   id="eyeShape"
                   type="range"
                   className="slider-thumb form-range h-2 w-full appearance-none bg-teal-300 p-0 focus:shadow-none focus:outline-none focus:ring-0"
@@ -184,8 +184,8 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.pattern}
                   onChange={onChange}
-                  min="0"
-                  max="6"
+                  min="10"
+                  max="16"
                   id="pattern"
                   type="range"
                   className="slider-thumb form-range h-2 w-full appearance-none bg-teal-300 p-0 focus:shadow-none focus:outline-none focus:ring-0"
@@ -203,7 +203,7 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.patternColor}
                   onChange={onChange}
-                  min="0"
+                  min="10"
                   max="99"
                   id="patternColor"
                   type="range"
@@ -222,8 +222,8 @@ const Factory: NextPage = () => {
                 <input
                   value={dna.animation}
                   onChange={onChange}
-                  min="0"
-                  max="5"
+                  min="10"
+                  max="15"
                   id="animation"
                   type="range"
                   className="slider-thumb form-range h-2 w-full appearance-none bg-teal-300 p-0 focus:shadow-none focus:outline-none focus:ring-0"

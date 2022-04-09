@@ -1,21 +1,21 @@
 import { Animations, Colors, EyeShape, Patterns } from "../../types";
 
 export const eyeShapes: EyeShape = {
-  0: { border: "none" },
-  1: { borderTop: "15px solid" },
-  2: { borderBottom: "15px solid" },
-  3: { width: "24px" },
-  4: { borderRadius: "25%" },
-  5: { height: "25px" },
-  6: { width: "25px", height: "20px" },
-  7: { border: "black 6px dashed " },
-  8: { border: "black 7px dotted" },
-  9: { borderRight: "42px black dotted" },
+  10: { border: "none" },
+  11: { borderTop: "15px solid" },
+  12: { borderBottom: "15px solid" },
+  13: { width: "24px" },
+  14: { borderRadius: "25%" },
+  15: { height: "25px" },
+  16: { width: "25px", height: "20px" },
+  17: { border: "black 6px dashed " },
+  18: { border: "black 7px dotted" },
+  19: { borderRight: "42px black dotted" },
 };
 
 export const patterns: Patterns = {
-  0: {},
-  1: {
+  10: {},
+  11: {
     right: {
       top: "-5px",
       width: "22px",
@@ -31,12 +31,12 @@ export const patterns: Patterns = {
       borderRadius: "50%",
     },
   },
-  2: {
+  12: {
     mid: { borderRadius: "50%", transform: "rotate(90deg)" },
   },
-  3: { mid: { transform: "scale(2) rotate(180deg)" } },
-  4: { mid: { transform: "rotate(180deg) translateY(40px)" } },
-  5: {
+  13: { mid: { transform: "scale(2) rotate(180deg)" } },
+  14: { mid: { transform: "rotate(180deg) translateY(40px)" } },
+  15: {
     mid: {
       left: "102px",
       height: 0,
@@ -56,7 +56,7 @@ export const patterns: Patterns = {
       left: "-55px",
     },
   },
-  6: {
+  16: {
     mid: { borderRadius: "50%", height: "24px", width: "24px" },
     right: { borderRadius: "50%", height: "24px", width: "24px" },
     left: { borderRadius: "50%", height: "24px", width: "24px" },
@@ -64,26 +64,16 @@ export const patterns: Patterns = {
 };
 
 export const animations: Animations = {
-  0: { head: "" },
-  1: { head: "animate-wiggle" },
-  2: { head: "animate-nod" },
-  3: { tail: "animate-slide" },
-  4: { earLeft: "animate-earLeft", earRight: "animate-earRight" },
-  5: { earLeft: "animate-attentiveLeft", earRight: "animate-attentiveRight" },
-  6: { head: "lofasz" },
+  10: { head: "" },
+  11: { head: "animate-wiggle" },
+  12: { head: "animate-nod" },
+  13: { tail: "animate-slide" },
+  14: { earLeft: "animate-earLeft", earRight: "animate-earRight" },
+  15: { earLeft: "animate-attentiveLeft", earRight: "animate-attentiveRight" },
+  16: { head: "lofasz" },
 };
 
 export const colors: Colors = {
-  0: "#ae494f",
-  1: "#9a3031",
-  2: "#8cd42e",
-  3: "#a0417a",
-  4: "#91c656",
-  5: "#299f7a",
-  6: "#c65d1e",
-  7: "#b2bbd6",
-  8: "#2d4024",
-  9: "#4b5715",
   10: "#ffcc80",
   11: "#3f1174",
   12: "#b22a90",

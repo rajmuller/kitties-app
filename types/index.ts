@@ -6,27 +6,26 @@ type LiteralDigitsWithoutZero = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 type NumberString<T extends number> = `${T}`;
 
 export type From0To9 = NumberString<LiteralDigits>;
-export type From0To6 = NumberString<Exclude<LiteralDigits, 9 | 8 | 7>>;
-export type From0To5 = Exclude<From0To6, "6">;
 type LiterStringDigitsWithoutZero = NumberString<LiteralDigitsWithoutZero>;
 
 type AppendDigit<T extends number | string> = `${T}${LiteralDigits}`;
 
 type MakeSet<P extends string> = AppendDigit<P>;
 
+export type From10To19 = MakeSet<"1">;
+export type From10To16 = Exclude<From10To19, "19" | "18" | "17">;
+export type From10To15 = Exclude<From10To16, "16">;
 export type From10To99 = MakeSet<LiterStringDigitsWithoutZero>;
 
-export type From0To99 = From0To9 | From10To99;
-
-export type Colors = Record<From0To99, string>;
-export type EyeShape = Record<From0To9, CSSProperties>;
+export type Colors = Record<From10To99, string>;
+export type EyeShape = Record<From10To19, CSSProperties>;
 export type Patterns = Record<
-  From0To6,
+  From10To16,
   { mid?: CSSProperties; left?: CSSProperties; right?: CSSProperties }
 >;
 
 export type Animations = Record<
-  From0To6,
+  From10To16,
   {
     head?: string;
     tail?: string;
@@ -38,12 +37,12 @@ export type Animations = Record<
 
 export type DNA = {
   bodyColor: From10To99;
-  mouthTailColor: From0To99;
-  eyeColor: From0To99;
-  earPawColor: From0To99;
-  eyeShape: From0To9;
-  pattern: From0To6;
-  patternColor: From0To99;
-  animation: From0To5;
-  secret?: From0To9;
+  mouthTailColor: From10To99;
+  eyeColor: From10To99;
+  earPawColor: From10To99;
+  eyeShape: From10To19;
+  pattern: From10To16;
+  patternColor: From10To99;
+  animation: From10To15;
+  secret?: From10To19;
 };
