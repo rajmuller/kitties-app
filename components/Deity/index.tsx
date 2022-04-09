@@ -22,11 +22,15 @@ const Deity = ({
   return (
     <div className={`relative h-[500px] w-[500px] ${containerProps}`}>
       {[...new Array(5).map(() => 0)].map((_, index) => {
+        console.log({ index });
+
         return (
           <Image
             key={index}
             className={
-              index.toString() === background ? "opacity-100" : "opacity-0"
+              (index + 1).toString() === background
+                ? "opacity-100"
+                : "opacity-0"
             }
             layout="fill"
             alt="background of Deity"
