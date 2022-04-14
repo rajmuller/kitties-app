@@ -29,7 +29,6 @@ const Factory: NextPage = () => {
   const [tab, setTab] = useState<"colors" | "cattributes">("colors");
 
   const { onCreate } = useCreateGen0Kitty(dna);
-  console.log("rerender");
 
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
