@@ -24,7 +24,12 @@ const WalletButton = ({ className }: ButtonProps) => {
   }, [account, activateBrowserWallet, setIsOpen]);
 
   return (
-    <Button onClick={onClick} className={className}>
+    <Button
+      onClick={onClick}
+      className={`${
+        account ? "border border-orange-500" : "bg-orange-500"
+      } ${className}`}
+    >
       {account ? account.slice(0, 6) : "Connect"}
     </Button>
   );

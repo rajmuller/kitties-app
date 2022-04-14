@@ -71,11 +71,14 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
         </Dialog.Description>
 
         <div className="flex w-full gap-8">
-          <Button className="flex-1" onClick={() => push("/my-kitties")}>
+          <Button
+            className="flex-1 bg-orange-500"
+            onClick={() => push("/my-kitties")}
+          >
             My Kitties
           </Button>
           <Button
-            className="flex-1 border border-orange-500 bg-transparent"
+            className="flex-1 border border-orange-500"
             onClick={onDisconnect}
           >
             Disconnect
