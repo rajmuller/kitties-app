@@ -25,12 +25,15 @@ const Header = () => {
         <NextLink href="/">
           <a>Logo</a>
         </NextLink>
-        <ul className="flex items-center justify-center gap-8">
-          <Link href="/">Home</Link>
-          <Link href="/cataloge">Catalogue</Link>
-          <Link href="/factory">Factory</Link>
-          <WalletButton />
-        </ul>
+
+        <nav>
+          <ul className="flex items-center justify-center gap-8">
+            <Link href="/">Home</Link>
+            <Link href="/cataloge">Catalogue</Link>
+            <Link href="/factory">Factory</Link>
+            <WalletButton />
+          </ul>
+        </nav>
       </div>
       <div className="h-[3px] w-full bg-header-gradient" />
     </header>

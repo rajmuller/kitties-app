@@ -10,7 +10,7 @@ const config: Config = {
   readOnlyChainId: ChainId.Mumbai,
   readOnlyUrls: {
     [ChainId.Mumbai]: process.env.NEXT_PUBLIC_MUMBAI_ENDPOINT as string,
-    [ChainId.Polygon]: process.env.NEXT_PUBLIC_POLYGON_ENDPOINT as string,
+    // [ChainId.Polygon]: process.env.NEXT_PUBLIC_POLYGON_ENDPOINT as string,
   },
 };
 
@@ -24,7 +24,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
       <DAppProvider config={config}>
         <Layout>
-          <Component {...pageProps} />;
+          <Component {...pageProps} />
         </Layout>
       </DAppProvider>
     </>

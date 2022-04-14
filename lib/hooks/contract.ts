@@ -80,8 +80,6 @@ export function useChainId() {
   const { chainId } = useEthers();
 
   switch (chainId) {
-    case ChainId.Hardhat:
-      return chainId;
     case ChainId.Mumbai:
       return chainId;
     case ChainId.Polygon:

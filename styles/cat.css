@@ -5,7 +5,7 @@
     border: 6px solid transparent;
     -webkit-border-radius: 50% 50% 45% 45%;
     border-radius: 50% 50% 45% 45%;
-    z-index: 20;
+    z-index: 2;
 }
 .cat__head-dots {
     position: absolute;
@@ -80,7 +80,7 @@
     background: #fff;
     border-radius: 50%;
     margin: 38px;
-    z-index: 100;
+    z-index: 4;
 }
 .cat__eye span {
     position: absolute;
@@ -89,7 +89,7 @@
     height: 42px;
     background: #373737;
     border-radius: 50%;
-    z-index: 200;
+    z-index: 4;
 }
 .cat__eye span::after {
     content: '';
@@ -127,7 +127,7 @@
     border-left: 14px solid rgba(255, 255, 255, 0);
     border-top: 14px solid #e57373;
     border-radius: 40%;
-    z-index: 100;
+    z-index: 5;
 }
 .cat__mouth-contour {
     position: absolute;

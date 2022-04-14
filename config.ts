@@ -12,6 +12,11 @@ export const CONTRACTS = {
   },
 };
 
+export const CHAIN_EXPLORER = {
+  [ChainId.Mumbai]: "https://mumbai.polygonscan.com/",
+  [ChainId.Polygon]: "https://polygonscan.com/",
+};
+
 export const NATIVE_CURRENCY = {
   [ChainId.Hardhat]: "ETH",
   [ChainId.Mumbai]: "MATIC",
