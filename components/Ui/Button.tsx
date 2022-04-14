@@ -13,7 +13,7 @@ const Button = ({ children, onClick, className }: ButtonProps) => {
       onClick={onClick}
       whileTap={{ y: 0 }}
       whileHover={{ y: -2 }}
-      className={`inline-flex items-center justify-center overflow-hidden rounded-md bg-orange-500 text-2xl font-medium tracking-wide hover:shadow-wallet ${className}`}
+      className={`inline-flex items-center justify-center overflow-hidden rounded-md text-2xl font-medium tracking-wide hover:shadow-wallet ${className}`}
     >
       <span className="h-full w-full px-6 py-2">{children}</span>
     </motion.button>

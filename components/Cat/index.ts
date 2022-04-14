@@ -1,3 +1,3 @@
-export {default as Cat } from "./Cat"
-export {default as MyCats } from "./MyCats"
-export * from "./attributes"
+export * from "./attributes";
+export { default as Cat } from "./Cat";
+export { default as MyCats } from "./MyCats";

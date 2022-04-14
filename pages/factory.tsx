@@ -1,7 +1,18 @@
 import type { NextPage } from "next";
 import { ChangeEvent, useCallback, useState } from "react";
+import { GiChemicalDrop } from "react-icons/gi";
 import { Cat } from "../components";
-import { DNA } from "../types";
+import { Button } from "../components/Ui";
+import { DNA, From10To15, From10To16, From10To19, From10To99 } from "../types";
+
+const generateRandom = (min = 0, max = 100) => {
+  let difference = max - min;
+  let rand = Math.random();
+  rand = Math.floor(rand * difference);
+  rand = rand + min;
+
+  return rand.toString();
+};
 
 const Factory: NextPage = () => {
   const [dna, setDna] = useState<DNA>({
@@ -25,30 +36,48 @@ const Factory: NextPage = () => {
     [dna]
   );
 
+  const onRandomize = useCallback(() => {
+    setDna({
+      bodyColor: generateRandom(10) as From10To99,
+      mouthTailColor: generateRandom(10) as From10To99,
+      eyeColor: generateRandom(10) as From10To99,
+      earPawColor: generateRandom(10) as From10To99,
+      eyeShape: generateRandom(10, 20) as From10To19,
+      pattern: generateRandom(10, 17) as From10To16,
+      patternColor: generateRandom(10) as From10To99,
+      animation: generateRandom(10, 16) as From10To15,
+    });
+  }, []);
+
   return (
     <div className=" flex h-screen w-full flex-wrap items-center justify-center gap-16">
-      <div className="relative flex items-center justify-center rounded-2xl bg-slate-300 p-32 shadow-2xl">
-        <Cat
-          bodyColor={dna.bodyColor}
-          mouthTailColor={dna.mouthTailColor}
-          eyeColor={dna.eyeColor}
-          earPawColor={dna.earPawColor}
-          eyeShape={dna.eyeShape}
-          pattern={dna.pattern}
-          patternColor={dna.patternColor}
-          animation={dna.animation}
-        />
-        <p className="absolute bottom-8 left-8 mt-4 text-3xl">
-          {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
-        </p>
+      <div className="rounded-md bg-rainbow p-1 shadow-xl">
+        <div className="relative flex items-center justify-center rounded-md bg-white p-32 ">
+          <Cat
+            bodyColor={dna.bodyColor}
+            mouthTailColor={dna.mouthTailColor}
+            eyeColor={dna.eyeColor}
+            earPawColor={dna.earPawColor}
+            eyeShape={dna.eyeShape}
+            pattern={dna.pattern}
+            patternColor={dna.patternColor}
+            animation={dna.animation}
+          />
+          <p className="absolute bottom-8 left-8 mt-4 text-3xl">
+            {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
+          </p>
+        </div>
       </div>
 
-      <div className="rounded-2xl bg-slate-200 p-8 shadow-2xl">
-        <p className="mb-4 text-4xl">Factory</p>
-        <div className="mb-8 flex w-full">
+      <div className="rounded-2xl p-8 shadow-2xl">
+        <div className="mb-8 flex items-end gap-2">
+          <p className="text-4xl">Factory</p>
+          <GiChemicalDrop size={36} className="text-teal-400" />
+        </div>
+        <div className="mb-8 flex w-full text-3xl">
           <button
             onClick={() => setTab("colors")}
-            className="-ml-8 w-full border-b border-slate-500  pt-4 pb-2 text-xl hover:border-b-2 hover:border-slate-600 active:border-slate-700"
+            className={`-ml-8 w-full border-b border-teal-500  pt-4 pb-2 hover:border-b-2 hover:border-teal-600 active:border-teal-700 `}
             style={
               tab === "colors"
                 ? {
@@ -61,7 +90,7 @@ const Factory: NextPage = () => {
           </button>
           <button
             onClick={() => setTab("cattributes")}
-            className="-mr-8 w-full border-b border-slate-500 pt-4 pb-2 text-xl hover:border-b-2  hover:border-slate-600 active:border-slate-700"
+            className="-mr-8 w-full border-b border-teal-500 pt-4 pb-2 hover:border-b-2  hover:border-teal-600 active:border-teal-700"
             style={
               tab === "cattributes"
                 ? {
@@ -231,6 +260,15 @@ const Factory: NextPage = () => {
               </div>
             </>
           )}
+        </div>
+        <div className="mt-8 flex items-center justify-center gap-8">
+          <Button
+            onClick={onRandomize}
+            className="flex-1 border border-teal-400"
+          >
+            Randomize
+          </Button>
+          <Button className="flex-1 bg-teal-400">Create</Button>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
     border: 6px solid transparent;
     -webkit-border-radius: 50% 50% 45% 45%;
     border-radius: 50% 50% 45% 45%;
-    z-index: 2;
+    z-index: 4;
 }
 .cat__head-dots {
     position: absolute;

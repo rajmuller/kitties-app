@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <WalletModalContext.Provider value={{ isOpen, setIsOpen }}>
-      <div className="text bg-offWhite text-2xl tracking-wide text-vampire-black">
+      <div className="text text-2xl tracking-wide text-vampire-black">
         <Header />
         {children}
       </div>
