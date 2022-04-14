@@ -5,8 +5,7 @@
     border: 6px solid transparent;
     -webkit-border-radius: 50% 50% 45% 45%;
     border-radius: 50% 50% 45% 45%;
-    background: #ffcc80;
-    z-index: 20;
+    z-index: 4;
 }
 .cat__head-dots {
     position: absolute;
@@ -81,7 +80,7 @@
     background: #fff;
     border-radius: 50%;
     margin: 38px;
-    z-index: 100;
+    z-index: 4;
 }
 .cat__eye span {
     position: absolute;
@@ -90,7 +89,7 @@
     height: 42px;
     background: #373737;
     border-radius: 50%;
-    z-index: 200;
+    z-index: 4;
 }
 .cat__eye span::after {
     content: '';
@@ -128,7 +127,7 @@
     border-left: 14px solid rgba(255, 255, 255, 0);
     border-top: 14px solid #e57373;
     border-radius: 40%;
-    z-index: 100;
+    z-index: 5;
 }
 .cat__mouth-contour {
     position: absolute;
@@ -197,6 +196,7 @@
 }
 .cat__body {
     position: relative;
+  height: 82px;
 }
 .cat__chest {
     position: absolute;
@@ -204,7 +204,6 @@
     top: -48px;
     width: 120px;
     height: 120px;
-    background: #ffcc80;
     border: 5px solid  transparent;
     border-radius: 50% 50% 40% 40%;
     z-index: 3;
@@ -224,8 +223,8 @@
     position: absolute;
     top: 24px;
     width: 28px;
-    height: 48px;
-    background: #ffcc80;
+    height: 56px;
+    background: inherit;
     border: none;
     border-bottom: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -240,7 +239,7 @@
     left: 148px;
     width: 35px;
     height: 32px;
-    background: #ffcc80;
+    background: inherit;
     border-radius: 45%;
     border: 5px solid transparent;
     z-index: 2;
@@ -253,7 +252,7 @@
     left: 48px;
     width: 35px;
     height: 32px;
-    background: #ffcc80;
+    background: inherit;
     border-radius: 45%;
     border: 5px solid transparent;
     z-index: 2;
