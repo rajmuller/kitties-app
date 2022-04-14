@@ -21,21 +21,21 @@ type ModalProps = {
 };
 
 const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
-  const { account, deactivate } = useEthers();
+  const { account } = useEthers();
   const balance = useEtherBalance(account);
   const chainId = useChainId();
   const { push } = useRouter();
   const { staticCopy } = useCopyClipboard();
 
-  const onDisconnect = useCallback(() => {
-    deactivate();
-    setIsOpen(false);
-  }, [deactivate, setIsOpen]);
-
   const onCopy = useCallback(() => {
     staticCopy(account);
     toast.success("Address copied to clipboard");
   }, [account, staticCopy]);
+
+  const onNavigate = useCallback(() => {
+    setIsOpen(false);
+    push("/my-kitties");
+  }, [push, setIsOpen]);
 
   return (
     <Dialog
@@ -95,7 +95,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
         <div className="flex w-full gap-8">
           <Button
             className="flex-1 border border-teal-500"
-            onClick={() => push("/my-kitties")}
+            onClick={onNavigate}
           >
             My Kitties
           </Button>
