@@ -19,7 +19,6 @@ const Layout = ({ children }: LayoutProps) => {
       <Toaster
         toastOptions={{
           className: "text-2xl",
-          duration: 3000,
         }}
         position="bottom-center"
       />

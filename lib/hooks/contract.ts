@@ -1,11 +1,18 @@
 import { AddressZero } from "@ethersproject/constants";
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
-import { ChainId, useCall, useEthers } from "@usedapp/core";
-import { Contract } from "ethers";
+import {
+  ChainId,
+  TransactionStatus,
+  useCall,
+  useContractFunction,
+  useEthers,
+} from "@usedapp/core";
+import { BigNumber, Contract } from "ethers";
 import { Interface, isAddress } from "ethers/lib/utils";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import toast from "react-hot-toast";
 import { CONTRACTS } from "../../config";
-import { KittyContract } from "../../types";
+import { DNA, KittyContract } from "../../types";
 import KittyJson from "../abis/KittyContract.json";
 
 export enum ApprovalState {
@@ -27,10 +34,10 @@ export enum Side {
   SELL = 1,
 }
 
-const DexInterface = new Interface(KittyJson.abi);
+const KittyContractInterface = new Interface(KittyJson.abi);
 
 const getSigner = (library: Web3Provider, account: string): JsonRpcSigner => {
-  return library.getSigner(account).connectUnchecked();
+  return library.getSigner(account);
 };
 
 const getProviderOrSigner = (
@@ -62,6 +69,8 @@ const useContract = (
     if (!address || address === AddressZero || !ABI || !library) {
       return null;
     }
+    console.log({ account });
+
     try {
       return getContract(
         address,
@@ -89,17 +98,16 @@ export function useChainId() {
   }
 }
 
-const useKittyContract = (
-  withSignerIfPossible?: boolean
-): KittyContract | null => {
+const useKittyContract = (withSignerIfPossible?: boolean) => {
   const chainId = useChainId();
 
-  const dex = useContract(
+  const kittiContract = useContract(
     CONTRACTS[chainId].kitty,
-    DexInterface,
+    KittyContractInterface,
     withSignerIfPossible
   ) as unknown as KittyContract;
-  return dex;
+
+  return useMemo(() => kittiContract, [kittiContract]);
 };
 
 export const useTotalSupply = () => {
@@ -116,8 +124,96 @@ export const useTotalSupply = () => {
   if (error) {
     // eslint-disable-next-line no-console
     console.error(error.message);
-    return;
   }
 
-  return value?.[0];
+  return useMemo(() => value?.[0], [value]);
+};
+
+const convertDnaToGenes = (dna: DNA): BigNumber => {
+  let genes = "";
+
+  Object.values(dna).forEach((dnaValue) => {
+    genes += dnaValue;
+  });
+
+  return BigNumber.from(genes);
+};
+
+const useDnaToGenes = (dna: DNA): BigNumber => {
+  return useMemo(() => convertDnaToGenes(dna), [dna]);
+};
+
+type UseContractNotificationType = {
+  resetState: () => void;
+  status: TransactionStatus["status"];
+  errorMessage: string;
+  miningMessage: string;
+  successMessage: string;
+};
+
+export const useContractNotification = ({
+  resetState,
+  status,
+  errorMessage,
+  miningMessage,
+  successMessage,
+}: UseContractNotificationType) => {
+  const toastRef = useRef("");
+
+  useEffect(() => {
+    resetState();
+
+    switch (status) {
+      case "Exception":
+      case "Fail": {
+        if (!errorMessage) return;
+
+        const toastId = toast.error(errorMessage, {
+          id: toastRef.current,
+          duration: 6000,
+        });
+        toastRef.current = toastId;
+        break;
+      }
+
+      case "Mining": {
+        if (!miningMessage) return;
+
+        const toastId = toast.loading(miningMessage, { id: toastRef.current });
+        toastRef.current = toastId;
+        break;
+      }
+
+      case "Success": {
+        if (!successMessage) return;
+
+        const toastId = toast.success(successMessage, {
+          id: toastRef.current,
+          duration: 6000,
+        });
+        toastRef.current = toastId;
+        break;
+      }
+    }
+  }, [errorMessage, miningMessage, resetState, status, successMessage]);
+};
+
+export const useCreateGen0Kitty = (dna: DNA) => {
+  const contract = useKittyContract();
+  const create = useContractFunction(contract, "createKittyGen0");
+  const genes = useDnaToGenes(dna);
+
+  useContractNotification({
+    resetState: create.resetState,
+    status: create.state.status,
+    errorMessage: `Error - create Gen0 Kitty: \n${create.state.errorMessage} `,
+    miningMessage: `Loading - create Gen0 Kitty with genes: ${genes.toString()}...`,
+    successMessage: `Success - create Gen0 Kitty with genes: ${genes.toString()}`,
+  });
+
+  const onCreate = useCallback(() => create.send(genes), [create, genes]);
+
+  return useMemo(() => {
+    return { ...create, onCreate };
+  }, [create, onCreate]);
 };
