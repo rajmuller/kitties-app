@@ -21,7 +21,7 @@ const Link = ({ href, children }: LinkProps) => {
 const Header = () => {
   return (
     <header className="flex w-full flex-col items-center justify-center">
-      <div className="flex h-16 w-full max-w-5xl items-center justify-between px-8">
+      <div className="max-w-container flex h-16 w-full items-center justify-between">
         <NextLink href="/">
           <a>Logo</a>
         </NextLink>

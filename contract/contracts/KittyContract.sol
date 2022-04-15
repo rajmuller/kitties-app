@@ -114,12 +114,4 @@ contract KittyContract is Ownable, ERC721 {
 
         return kittyId;
     }
-
-    function getKittyByOwner(uint256 genes) public {
-        require(gen0Counter < CREATION_LIMIT_GEN0, "Gen0 creation over limit");
-
-        gen0Counter++;
-
-        _createKitty(genes, 0, 0, msg.sender, 0);
-    }
 }

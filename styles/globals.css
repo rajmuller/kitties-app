@@ -25,3 +25,16 @@ body {
   }
 }
 
+@layer utilities {
+  .max-w-container {
+    max-width: 1280px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @media screen and (min-width: 2400px) {
+    .max-w-container {
+      max-width: 1920px;
+    }
+  }
+}
+
