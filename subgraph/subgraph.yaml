@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: KittyContract
+    network: mumbai
+    source:
+      address: "0x6A5ac2FaC7B6E4F4E5AA6D32641EB3009e8550FB"
+      abi: KittyContract
+      startBlock: 25917521
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Cat
+        - User
+        - Dna
+      abis:
+        - name: KittyContract
+          file: ./abis/KittyContract.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts

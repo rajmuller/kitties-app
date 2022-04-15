@@ -1,0 +1,30 @@
+type Cat @entity {
+  id: ID!
+  owner: User!
+  approved: Bytes! # address
+  birthTime: BigInt! # uint256
+  momId: BigInt! # uint256
+  dadId: BigInt! # uint256
+  genes: BigInt! # uint256
+  dna: Dna!
+  generation: BigInt! # uint256
+}
+
+type User @entity {
+  id: ID!
+  cats: [Cat!]! @derivedFrom(field: "owner")
+}
+
+type Dna @entity {
+  id: ID!
+  cat: Cat
+  bodyColor: String
+  mouthTailColor: String
+  eyeColor: String
+  earPawColor: String
+  eyeShape: String
+  pattern: String
+  patternColor: String
+  animation: String
+  secret: String
+}
