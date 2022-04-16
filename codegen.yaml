@@ -1,0 +1,13 @@
+schema:  ${NEXT_PUBLIC_GRAPHQL_URL}
+documents: './lib/graphql/queries.ts'
+generates:
+  ./graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: fetch
+hooks:
+  afterAllFileWrite:
+    - prettier --write
