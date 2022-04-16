@@ -69,7 +69,6 @@ const useContract = (
     if (!address || address === AddressZero || !ABI || !library) {
       return null;
     }
-    console.log({ account });
 
     try {
       return getContract(
@@ -79,6 +78,7 @@ const useContract = (
         withSignerIfPossible && account ? account : undefined
       );
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Failed to get contract", error);
       return null;
     }
@@ -139,7 +139,7 @@ const convertDnaToGenes = (dna: DNA): BigNumber => {
   return BigNumber.from(genes);
 };
 
-const useDnaToGenes = (dna: DNA): BigNumber => {
+export const useDnaToGenes = (dna: DNA): BigNumber => {
   return useMemo(() => convertDnaToGenes(dna), [dna]);
 };
 

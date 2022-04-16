@@ -2,6 +2,7 @@ import "@fontsource/mouse-memoirs";
 import { ChainId, Config, DAppProvider } from "@usedapp/core";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "../components/Layout";
 import "../styles/cat.css";
 import "../styles/globals.css";
@@ -14,6 +15,15 @@ const config: Config = {
   },
 };
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: 30000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
@@ -23,9 +33,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
 
       <DAppProvider config={config}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </QueryClientProvider>
       </DAppProvider>
     </>
   );

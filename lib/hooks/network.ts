@@ -52,17 +52,18 @@ export const useNetworkHelper = () => {
         { chainId: SUPPORTED_NETWORKS[chainId].chainId },
         account,
       ]);
-    } catch (switchError) {
+    } catch (switchError: any) {
       // This error code indicates that the chain has not been added to MetaMask.
-      // @ts-ignore TYPE NEEDS FIXING
       if (switchError.code === 4902) {
         try {
           await library?.send("wallet_addEthereumChain", [params, account]);
         } catch (addError) {
           // handle "add" error
+          // eslint-disable-next-line no-console
           console.error(`Add chain error ${addError}`);
         }
       }
+      // eslint-disable-next-line no-console
       console.error(`Switch chain error ${switchError}`);
     }
   };
