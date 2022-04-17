@@ -3,12 +3,23 @@ import { AnimatePresence } from "framer-motion";
 import { useCallback, useState } from "react";
 import { Button, Card, CardContainer, Cat, Loader } from "../components";
 import { useGetCatsByOwnerQuery } from "../lib/graphql/generated";
+import { useBreed } from "../lib/hooks";
 import { DNA } from "../types";
 
 const Breed = () => {
   const [damId, setDamId] = useState("");
   const [sireId, setSireId] = useState("");
 
+  const { account } = useEthers();
+  const id = account?.toLowerCase();
+  const { data, status } = useGetCatsByOwnerQuery(
+    {
+      id: id!,
+    },
+    { enabled: !!id, refetchInterval: 2000 }
+  );
+
+  const { onBreed } = useBreed(damId, sireId);
   const handleParentSet = useCallback(
     (id: string, role: "dam" | "sire") => {
       if (role === "sire") {
@@ -29,15 +40,6 @@ const Breed = () => {
     [damId, sireId]
   );
 
-  const { account } = useEthers();
-  const id = account?.toLowerCase();
-  const { data, status } = useGetCatsByOwnerQuery(
-    {
-      id: id!,
-    },
-    { enabled: !!id, refetchInterval: 2000 }
-  );
-
   if (status === "loading") {
     return <Loader />;
   }
@@ -47,6 +49,7 @@ const Breed = () => {
       <AnimatePresence>
         {damId && sireId && (
           <Button
+            onClick={onBreed}
             initial={{ x: "-50%", bottom: 0, size: 0 }}
             animate={{ bottom: "40px", size: 1 }}
             exit={{ bottom: "-200px", size: 0 }}

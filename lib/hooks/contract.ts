@@ -15,25 +15,6 @@ import { CONTRACTS } from "../../config";
 import { DNA, KittyContract } from "../../types";
 import KittyJson from "../abis/KittyContract.json";
 
-export enum ApprovalState {
-  // bug
-  // eslint-disable-next-line no-unused-vars
-  UNKNOWN = "UNKNOWN",
-  // eslint-disable-next-line no-unused-vars
-  NOT_APPROVED = "NOT_APPROVED",
-  // eslint-disable-next-line no-unused-vars
-  APPROVED = "APPROVED",
-  // eslint-disable-next-line no-unused-vars
-  PENDING = "PENDING",
-}
-
-export enum Side {
-  // eslint-disable-next-line no-unused-vars
-  BUY = 0,
-  // eslint-disable-next-line no-unused-vars
-  SELL = 1,
-}
-
 const KittyContractInterface = new Interface(KittyJson.abi);
 
 const getSigner = (library: Web3Provider, account: string): JsonRpcSigner => {
@@ -211,9 +192,35 @@ export const useCreateGen0Kitty = (dna: DNA) => {
     successMessage: `Success - create Gen0 Kitty with genes: ${genes.toString()}`,
   });
 
-  const onCreate = useCallback(() => create.send(genes), [create, genes]);
+  const onCreate = useCallback(() => {
+    console.log("create");
+
+    return create.send(genes);
+  }, [create, genes]);
 
   return useMemo(() => {
     return { ...create, onCreate };
   }, [create, onCreate]);
 };
+
+// export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
+//   const contract = useKittyContract();
+//   const breed = useContractFunction(contract, "breed");
+
+//   useContractNotification({
+//     resetState: breed.resetState,
+//     status: breed.state.status,
+//     errorMessage: `Error - breeding \n${breed.state.errorMessage} `,
+//     miningMessage: `Loading - breed kitty...`,
+//     successMessage: `Success - breed kitty`,
+//   });
+
+//   const onBreed = useCallback(
+//     () => breed.send(momId, dadId),
+//     [breed, dadId, momId]
+//   );
+
+//   return useMemo(() => {
+//     return { ...breed, onBreed };
+//   }, [breed, onBreed]);
+// };
