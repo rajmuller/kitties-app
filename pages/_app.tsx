@@ -32,13 +32,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <DAppProvider config={config}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <DAppProvider config={config}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </QueryClientProvider>
-      </DAppProvider>
+        </DAppProvider>
+      </QueryClientProvider>
     </>
   );
 };

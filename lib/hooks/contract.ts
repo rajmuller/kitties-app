@@ -192,11 +192,7 @@ export const useCreateGen0Kitty = (dna: DNA) => {
     successMessage: `Success - create Gen0 Kitty with genes: ${genes.toString()}`,
   });
 
-  const onCreate = useCallback(() => {
-    console.log("create");
-
-    return create.send(genes);
-  }, [create, genes]);
+  const onCreate = useCallback(() => create.send(genes), [create, genes]);
 
   return useMemo(() => {
     return { ...create, onCreate };
