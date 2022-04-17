@@ -1,12 +1,12 @@
 import { DNA } from "../../types";
 import { animations, colors, eyeShapes, patterns } from "./attributes";
 
-
 type CatProps = {
   dna: DNA;
-}
+  className?: string;
+};
 
-const Cat = ({dna}: CatProps) => {
+const Cat = ({ dna, className }: CatProps) => {
   const {
     animation,
     bodyColor,
@@ -20,7 +20,7 @@ const Cat = ({dna}: CatProps) => {
   } = dna;
 
   return (
-    <div className="cat">
+    <div className={`cat scale-[60%] ${className}`}>
       <div className="cat__ear">
         <div
           id="leftEar"

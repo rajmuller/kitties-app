@@ -57,7 +57,7 @@ const Factory: NextPage = () => {
       <div className="flex w-full flex-wrap items-center justify-center gap-16 py-12">
         <div className="rounded-md bg-rainbow p-1 shadow-xl">
           <div className="relative flex items-center justify-center rounded-md bg-white p-32 ">
-            <Cat dna={dna} />
+            <Cat dna={dna} className="scale-100" />
             <p className="absolute bottom-8 left-8 mt-4 text-3xl">
               {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
             </p>
