@@ -1,17 +1,24 @@
 import { DNA } from "../../types";
 import { animations, colors, eyeShapes, patterns } from "./attributes";
 
-const Cat = ({
-  animation,
-  bodyColor,
-  earPawColor: earColor,
-  eyeColor,
-  eyeShape,
-  mouthTailColor,
-  pattern,
-  patternColor,
-  secret,
-}: DNA) => {
+
+type CatProps = {
+  dna: DNA;
+}
+
+const Cat = ({dna}: CatProps) => {
+  const {
+    animation,
+    bodyColor,
+    earPawColor: earColor,
+    eyeColor,
+    eyeShape,
+    mouthTailColor,
+    pattern,
+    patternColor,
+    secret,
+  } = dna;
+
   return (
     <div className="cat">
       <div className="cat__ear">

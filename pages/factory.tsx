@@ -7,7 +7,7 @@ import { useCreateGen0Kitty } from "../lib/hooks";
 import { DNA, From10To15, From10To16, From10To19, From10To99 } from "../types";
 
 const generateRandom = (min = 0, max = 100) => {
-  let difference = max - min;
+  const difference = max - min;
   let rand = Math.random();
   rand = Math.floor(rand * difference);
   rand = rand + min;
@@ -57,16 +57,7 @@ const Factory: NextPage = () => {
       <div className="flex w-full flex-wrap items-center justify-center gap-16 py-12">
         <div className="rounded-md bg-rainbow p-1 shadow-xl">
           <div className="relative flex items-center justify-center rounded-md bg-white p-32 ">
-            <Cat
-              bodyColor={dna.bodyColor}
-              mouthTailColor={dna.mouthTailColor}
-              eyeColor={dna.eyeColor}
-              earPawColor={dna.earPawColor}
-              eyeShape={dna.eyeShape}
-              pattern={dna.pattern}
-              patternColor={dna.patternColor}
-              animation={dna.animation}
-            />
+            <Cat dna={dna} />
             <p className="absolute bottom-8 left-8 mt-4 text-3xl">
               {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
             </p>
