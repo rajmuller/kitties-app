@@ -21,6 +21,7 @@ export const getCats = gql`
         earPawColor
         eyeShape
         pattern
+        patternColor
         animation
         secret
       }
@@ -31,15 +32,27 @@ export const getCats = gql`
 export const getCatById = gql`
   query getCatById($id: ID!) {
     cat(id: $id) {
-      id
-      dna {
-        bodyColor
-      }
       owner {
         id
       }
       approved
       birthTime
+      momId
+      dadId
+      genes
+      generation
+      dna {
+        id
+        bodyColor
+        mouthTailColor
+        eyeColor
+        earPawColor
+        eyeShape
+        pattern
+        patternColor
+        animation
+        secret
+      }
     }
   }
 `;

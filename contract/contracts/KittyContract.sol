@@ -83,7 +83,7 @@ contract KittyContract is Ownable, ERC721 {
         return newGen + 1;
     }
 
-    function _mixDna(uint256 momId, uint256 dadId) public view returns (uint256) {
+    function _mixDna(uint256 momId, uint256 dadId) internal view returns (uint256) {
         // 11 22 33 44 55 66 77 88 99
         uint256 momDna = kitties[momId].genes;
         uint256 dadDna = kitties[dadId].genes;

@@ -12,10 +12,12 @@ import { Interface, isAddress } from "ethers/lib/utils";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { CONTRACTS } from "../../config";
-import { DNA, KittyContract } from "../../types";
+import { DNA, KittyContract, Marketplace } from "../../types";
 import KittyJson from "../abis/KittyContract.json";
+import MarketJson from "../abis/Marketplace.json";
 
 const KittyContractInterface = new Interface(KittyJson.abi);
+const MarketplaceContractInterface = new Interface(MarketJson.abi);
 
 const getSigner = (library: Web3Provider, account: string): JsonRpcSigner => {
   return library.getSigner(account);
@@ -89,6 +91,18 @@ const useKittyContract = (withSignerIfPossible?: boolean) => {
   ) as unknown as KittyContract;
 
   return useMemo(() => kittiContract, [kittiContract]);
+};
+
+const useMarketplaceContract = (withSignerIfPossible?: boolean) => {
+  const chainId = useChainId();
+
+  const marketplaceContract = useContract(
+    CONTRACTS[chainId].marketplace,
+    MarketplaceContractInterface,
+    withSignerIfPossible
+  ) as unknown as Marketplace;
+
+  return useMemo(() => marketplaceContract, [marketplaceContract]);
 };
 
 export const useTotalSupply = () => {
@@ -194,6 +208,97 @@ export const useGen0Price = () => {
   }
 
   return useMemo(() => value?.[0], [value]);
+};
+
+export const useAllTokenOnSale = () => {
+   const contract = useMarketplaceContract(false);
+
+   const { value, error } =
+   useCall({
+     contract,
+     method: "getAllTokenOnSale",
+     args: [],
+   }) ?? {};
+ if (error) {
+   // eslint-disable-next-line no-console
+   console.error(error.message);
+ }
+
+ return useMemo(() => value?.[0], [value]);
+}
+
+export const useIsApprovedForAll = (address?: string | null) => {
+  const contract = useKittyContract();
+  const chainId = useChainId();
+  const { value, error } =
+    useCall(
+      address && {
+        contract,
+        method: "isApprovedForAll",
+        args: [address, CONTRACTS[chainId].marketplace],
+      }
+    ) ?? {};
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error.message);
+  }
+
+  return useMemo(() => value?.[0], [value]);
+};
+
+export const useSetApprovalForAll = (approved: boolean | null) => {
+  const contract = useKittyContract();
+  const chainId = useChainId();
+  const address = CONTRACTS[chainId].marketplace;
+  const approve = useContractFunction(contract, "setApprovalForAll");
+
+  useContractNotification({
+    resetState: approve.resetState,
+    status: approve.state.status,
+    errorMessage: `Error - approval for all tokens \n${approve.state.errorMessage} `,
+    miningMessage: `Loading - set approval for all tokens`,
+    successMessage: `Success - set approval for all tokens`,
+  });
+
+  const onApprove = useCallback(() => {
+    if (!address || approved == undefined) {
+      return;
+    }
+
+    return approve.send(address, approved);
+  }, [address, approve, approved]);
+
+  return useMemo(() => {
+    return { ...approve, onApprove };
+  }, [approve, onApprove]);
+};
+
+export const useCreateListing = (
+  price?: BigNumberish,
+  tokenId?: BigNumberish
+) => {
+  const contract = useMarketplaceContract();
+  const createListing = useContractFunction(contract, "setOffer");
+
+  useContractNotification({
+    resetState: createListing.resetState,
+    status: createListing.state.status,
+    errorMessage: `Error - create listing \n${createListing.state.errorMessage} `,
+    miningMessage: `Loading - create listing`,
+    successMessage: `Success - create listing`,
+  });
+
+  const onCreateListing = useCallback(() => {
+    if (!price || !tokenId) {
+      return;
+    }
+
+    return createListing.send(price, tokenId);
+  }, [createListing, price, tokenId]);
+
+  return useMemo(() => {
+    return { ...createListing, onCreateListing };
+  }, [createListing, onCreateListing]);
 };
 
 export const useCreateGen0Kitty = (dna: DNA) => {
