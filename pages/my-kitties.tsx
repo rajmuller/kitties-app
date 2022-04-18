@@ -7,7 +7,7 @@ import { useGetCatsByOwnerQuery } from "../lib/graphql/generated";
 import { useBreed } from "../lib/hooks";
 import { DNA } from "../types";
 
-const Breed = () => {
+const MyKitties = () => {
   const [damId, setDamId] = useState("");
   const [sireId, setSireId] = useState("");
 
@@ -102,6 +102,9 @@ const Breed = () => {
                 key={id}
               >
                 <Cat dna={dna as DNA} />
+                <p className=" pl-2 text-xl text-neutral-500">
+                  {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
+                </p>
               </Card>
             )
         )}
@@ -110,4 +113,4 @@ const Breed = () => {
   );
 };
 
-export default Breed;
+export default MyKitties;
