@@ -34,7 +34,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
 
   const onNavigate = useCallback(() => {
     setIsOpen(false);
-    push("/my-kitties");
+    push("/breed");
   }, [push, setIsOpen]);
 
   return (
@@ -97,7 +97,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
             className="flex-1 border border-teal-500"
             onClick={onNavigate}
           >
-            My Kitties
+            My Kittens
           </Button>
         </div>
       </div>

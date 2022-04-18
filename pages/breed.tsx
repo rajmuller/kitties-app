@@ -20,6 +20,8 @@ const Breed = () => {
     { enabled: !!id, refetchInterval: 2000 }
   );
 
+  const cats = data?.user?.cats.filter(({ genes }) => genes !== "0");
+
   const { onBreed } = useBreed(damId, sireId);
   const handleParentSet = useCallback(
     (id: string, role: "dam" | "sire") => {
@@ -45,7 +47,7 @@ const Breed = () => {
     return <Loader />;
   }
 
-  if (status === "success" && !data.user?.cats.length) {
+  if (status === "success" && !cats?.length) {
     return (
       <main className="max-w-container mx-auto mt-16 flex flex-col items-center justify-center">
         <div className="text-neutral-600">
@@ -88,18 +90,21 @@ const Breed = () => {
         )}
       </AnimatePresence>
       <CardContainer>
-        {data?.user?.cats.map(({ dna, id, generation }) => (
-          <Card
-            id={id}
-            generation={generation}
-            isSire={id === sireId}
-            isDam={id === damId}
-            handleParentSet={handleParentSet}
-            key={id}
-          >
-            <Cat dna={dna as DNA} />
-          </Card>
-        ))}
+        {cats?.map(
+          ({ dna, id, generation, genes }) =>
+            genes !== "0" && (
+              <Card
+                id={id}
+                generation={generation}
+                isSire={id === sireId}
+                isDam={id === damId}
+                handleParentSet={handleParentSet}
+                key={id}
+              >
+                <Cat dna={dna as DNA} />
+              </Card>
+            )
+        )}
       </CardContainer>
     </main>
   );
