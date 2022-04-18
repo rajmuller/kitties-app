@@ -8,11 +8,13 @@ type Cat @entity {
   genes: BigInt! # uint256
   dna: Dna!
   generation: BigInt! # uint256
+  offer: Offer
 }
 
 type User @entity {
   id: ID!
   cats: [Cat!]! @derivedFrom(field: "owner")
+  offers: [Offer!] @derivedFrom(field: "user")
 }
 
 type Dna @entity {
@@ -27,4 +29,14 @@ type Dna @entity {
   patternColor: String
   animation: String
   secret: String
+}
+
+type Offer @entity {
+  id: ID!
+  user: User!
+  seller: Bytes! # address
+  price: BigInt! # uint256
+  index: BigInt! # uint256
+  active: Boolean!
+  cat: Cat!
 }

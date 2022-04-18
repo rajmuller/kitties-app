@@ -2,14 +2,18 @@ import {
   KittyContract,
   Transfer as TransferEvent,
 } from "../generated/KittyContract/KittyContract";
-import { Cat, Dna, User } from "../generated/schema";
+import {
+  Marketplace,
+  MarketTransaction as MarketplaceTransactionEvent,
+} from "../generated/MarketplaceContract/Marketplace";
+import { Cat, Dna, Offer, User } from "../generated/schema";
 
 export function handleTransfer(event: TransferEvent): void {
   let cat = Cat.load(event.params.tokenId.toString());
 
   // mint
   if (!cat) {
-    let contract = KittyContract.bind(event.address);
+    const contract = KittyContract.bind(event.address);
     const kittie = contract.getKitty(event.params.tokenId);
 
     cat = new Cat(event.params.tokenId.toString());
@@ -19,6 +23,7 @@ export function handleTransfer(event: TransferEvent): void {
     cat.dadId = kittie.value3;
     cat.generation = kittie.value4;
     cat.dna = event.params.tokenId.toHexString();
+    cat.offer = event.params.tokenId.toString();
   }
 
   // transfer
@@ -48,4 +53,34 @@ export function handleTransfer(event: TransferEvent): void {
 
     dna.save();
   }
+}
+
+export function handleMarketTransaction(
+  event: MarketplaceTransactionEvent
+): void {
+  let offer = Offer.load(event.params.tokenId.toString());
+  if (!offer) {
+    const contract = Marketplace.bind(event.address);
+    const _Offer = contract.getOffer(event.params.tokenId);
+
+    offer = new Offer(event.params.tokenId.toString());
+    offer.cat = event.params.tokenId.toString();
+    offer.price = _Offer.value1;
+    offer.index = _Offer.value2;
+    offer.seller = _Offer.value0;
+  }
+
+  offer.user = event.params.owner.toHexString();
+
+  if (event.params.TxType.toHexString() == "Create offer") {
+    offer.active = true;
+  }
+  if (event.params.TxType.toHexString() == "Buy") {
+    offer.active = false;
+  }
+  if (event.params.TxType.toHexString() == "Remove offer") {
+    offer.active = false;
+  }
+
+  offer.save();
 }

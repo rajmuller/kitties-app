@@ -6,9 +6,9 @@ dataSources:
     name: KittyContract
     network: mumbai
     source:
-      address: "0x049d8ed690800dF2ABe533808cDAe811C79D7dCf"
+      address: "0xD8cf39845fC60aAEEEe32299eD00Af5343d4FDF5"
       abi: KittyContract
-      startBlock: 25917521
+      startBlock: 25985394
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -23,4 +23,24 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum
+    name: MarketplaceContract
+    network: mumbai
+    source:
+      address: "0xd683c0e466A3B8DdB43EffF863cC4851C18c7858"
+      abi: Marketplace
+      startBlock: 25985395
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Offer
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: MarketTransaction(indexed string,indexed address,indexed uint256)
+          handler: handleMarketTransaction
       file: ./src/mapping.ts
