@@ -46,7 +46,7 @@ export const getCatById = gql`
 
 export const getCatsByOwner = gql`
   query getCatsByOwner($id: ID!) {
-    users(where: { id: $id }) {
+    user(id: $id) {
       id
       cats {
         id

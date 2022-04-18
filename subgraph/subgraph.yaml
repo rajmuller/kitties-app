@@ -6,7 +6,7 @@ dataSources:
     name: KittyContract
     network: mumbai
     source:
-      address: "0x6A5ac2FaC7B6E4F4E5AA6D32641EB3009e8550FB"
+      address: "0x049d8ed690800dF2ABe533808cDAe811C79D7dCf"
       abi: KittyContract
       startBlock: 25917521
     mapping:

@@ -1,35 +1,18 @@
-import { AnimationProps, motion, MotionProps } from "framer-motion";
-import { MouseEventHandler, ReactNode } from "react";
+import { HTMLMotionProps, motion } from "framer-motion";
+import { ReactNode } from "react";
 
-type ButtonProps = {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+type ButtonProps = HTMLMotionProps<"button"> & {
   children?: ReactNode;
   className?: string;
-  style?: MotionProps["style"];
-  initial?: MotionProps["initial"];
-  animate?: AnimationProps["animate"];
-  exit?: AnimationProps["exit"];
 };
 
-const Button = ({
-  children,
-  onClick,
-  className,
-  style,
-  animate,
-  initial,
-  exit,
-}: ButtonProps) => {
+const Button = ({ children, className, ...props }: ButtonProps) => {
   return (
     <motion.button
-      onClick={onClick}
       whileTap={{ y: 0 }}
-      exit={exit}
       whileHover={{ y: -2 }}
-      initial={initial}
-      animate={animate}
-      style={style}
-      className={`inline-flex items-center justify-center overflow-hidden rounded-md text-2xl font-medium tracking-wide hover:shadow-wallet ${className}`}
+      className={`inline-flex items-center justify-center overflow-hidden rounded-md text-2xl font-medium tracking-wide hover:shadow-wallet disabled:bg-slate-200 disabled:text-slate-400 ${className}`}
+      {...props}
     >
       <span className="h-full w-full px-6 py-2">{children}</span>
     </motion.button>

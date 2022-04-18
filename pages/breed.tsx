@@ -1,5 +1,6 @@
 import { useEthers } from "@usedapp/core";
 import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { Button, Card, CardContainer, Cat, Loader } from "../components";
 import { useGetCatsByOwnerQuery } from "../lib/graphql/generated";
@@ -44,6 +45,30 @@ const Breed = () => {
     return <Loader />;
   }
 
+  if (status === "success" && !data.user?.cats.length) {
+    return (
+      <main className="max-w-container mx-auto mt-16 flex flex-col items-center justify-center">
+        <div className="text-neutral-600">
+          <p className="mb-4 text-4xl text-black">
+            {" "}
+            Oh Oh, you have zero cats...
+          </p>
+          <span>head over to </span>
+          <Link href="/factory">
+            <a className="text-3xl font-semibold text-teal-800">Factory</a>
+          </Link>
+          <span> to create a Gen0</span>
+          <p>Or</p>
+          <span>browse the </span>
+          <Link href="/catalogue">
+            <a className="text-3xl font-semibold text-teal-800">Catalogue</a>
+          </Link>
+          <span> to buy a cat for sale</span>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="max-w-container mx-auto mt-16 flex flex-col items-center justify-center">
       <AnimatePresence>
@@ -63,7 +88,7 @@ const Breed = () => {
         )}
       </AnimatePresence>
       <CardContainer>
-        {data?.users[0].cats?.map(({ dna, id, generation }) => (
+        {data?.user?.cats.map(({ dna, id, generation }) => (
           <Card
             id={id}
             generation={generation}

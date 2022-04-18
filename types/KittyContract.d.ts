@@ -12,6 +12,7 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -21,13 +22,14 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface KittyContractInterface extends ethers.utils.Interface {
   functions: {
+    "_mixDna(uint256,uint256)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "breed(uint256,uint256)": FunctionFragment;
     "createKittyGen0(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getGen0Price()": FunctionFragment;
     "getKitty(uint256)": FunctionFragment;
-    "getKittyByOwner(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -35,14 +37,20 @@ interface KittyContractInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setGen0Price(uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "_mixDna",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -61,11 +69,11 @@ interface KittyContractInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getKitty",
-    values: [BigNumberish]
+    functionFragment: "getGen0Price",
+    values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getKittyByOwner",
+    functionFragment: "getKitty",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -91,6 +99,10 @@ interface KittyContractInterface extends ethers.utils.Interface {
     values: [string, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setGen0Price",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -111,7 +123,12 @@ interface KittyContractInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
 
+  decodeFunctionResult(functionFragment: "_mixDna", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "breed", data: BytesLike): Result;
@@ -123,11 +140,11 @@ interface KittyContractInterface extends ethers.utils.Interface {
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getKitty", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getKittyByOwner",
+    functionFragment: "getGen0Price",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getKitty", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -148,6 +165,10 @@ interface KittyContractInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setGen0Price",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
@@ -165,6 +186,7 @@ interface KittyContractInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -253,6 +275,12 @@ export class KittyContract extends BaseContract {
   interface: KittyContractInterface;
 
   functions: {
+    _mixDna(
+      momId: BigNumberish,
+      dadId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -269,13 +297,15 @@ export class KittyContract extends BaseContract {
 
     createKittyGen0(
       genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getGen0Price(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getKitty(
       kittyId: BigNumberish,
@@ -289,11 +319,6 @@ export class KittyContract extends BaseContract {
         generation: number;
       }
     >;
-
-    getKittyByOwner(
-      genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: string,
@@ -335,6 +360,11 @@ export class KittyContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setGen0Price(
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -360,7 +390,18 @@ export class KittyContract extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
+
+  _mixDna(
+    momId: BigNumberish,
+    dadId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   approve(
     to: string,
@@ -378,13 +419,15 @@ export class KittyContract extends BaseContract {
 
   createKittyGen0(
     genes: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getGen0Price(overrides?: CallOverrides): Promise<BigNumber>;
 
   getKitty(
     kittyId: BigNumberish,
@@ -398,11 +441,6 @@ export class KittyContract extends BaseContract {
       generation: number;
     }
   >;
-
-  getKittyByOwner(
-    genes: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: string,
@@ -441,6 +479,11 @@ export class KittyContract extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setGen0Price(
+    price: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -464,7 +507,18 @@ export class KittyContract extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  withdraw(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
+    _mixDna(
+      momId: BigNumberish,
+      dadId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -489,6 +543,8 @@ export class KittyContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getGen0Price(overrides?: CallOverrides): Promise<BigNumber>;
+
     getKitty(
       kittyId: BigNumberish,
       overrides?: CallOverrides
@@ -501,11 +557,6 @@ export class KittyContract extends BaseContract {
         generation: number;
       }
     >;
-
-    getKittyByOwner(
-      genes: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     isApprovedForAll(
       owner: string,
@@ -542,6 +593,8 @@ export class KittyContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setGen0Price(price: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -564,6 +617,8 @@ export class KittyContract extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -655,6 +710,12 @@ export class KittyContract extends BaseContract {
   };
 
   estimateGas: {
+    _mixDna(
+      momId: BigNumberish,
+      dadId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -671,7 +732,7 @@ export class KittyContract extends BaseContract {
 
     createKittyGen0(
       genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     getApproved(
@@ -679,14 +740,11 @@ export class KittyContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getGen0Price(overrides?: CallOverrides): Promise<BigNumber>;
+
     getKitty(
       kittyId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getKittyByOwner(
-      genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     isApprovedForAll(
@@ -729,6 +787,11 @@ export class KittyContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setGen0Price(
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -754,9 +817,20 @@ export class KittyContract extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    _mixDna(
+      momId: BigNumberish,
+      dadId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -776,7 +850,7 @@ export class KittyContract extends BaseContract {
 
     createKittyGen0(
       genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getApproved(
@@ -784,14 +858,11 @@ export class KittyContract extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getGen0Price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getKitty(
       kittyId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getKittyByOwner(
-      genes: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
@@ -834,6 +905,11 @@ export class KittyContract extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setGen0Price(
+      price: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -857,6 +933,11 @@ export class KittyContract extends BaseContract {
 
     transferOwnership(
       newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

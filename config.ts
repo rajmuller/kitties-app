@@ -1,14 +1,13 @@
 import { ChainId } from "@usedapp/core";
 
 export const CONTRACTS = {
-  [ChainId.Hardhat]: {
-    kitty: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-  },
   [ChainId.Mumbai]: {
-    kitty: "0x6A5ac2FaC7B6E4F4E5AA6D32641EB3009e8550FB",
+    kitty: "0x049d8ed690800dF2ABe533808cDAe811C79D7dCf",
+    marketplace: "0x84c9e2FB685B6Cb9Bc94F47DdF8E856617505452",
   },
   [ChainId.Polygon]: {
     kitty: "test",
+    marketplace: "test",
   },
 };
 

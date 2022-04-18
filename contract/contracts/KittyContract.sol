@@ -6,12 +6,15 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract KittyContract is Ownable, ERC721 {
-    constructor() ERC721("Rein Kitties", "RK") {}
+    constructor() ERC721("Rein Kitties", "RK") {
+        _createKitty(0, 0, 0, owner(), 1 gwei);
+    }
 
     event Birth(address indexed owner, uint256 indexed kittyId);
 
     uint32 CREATION_LIMIT_GEN0 = 69;
     uint256 gen0Counter = 0;
+    uint256 private gen0Price = 0.1 ether;
 
     struct Kitty {
         uint256 genes;
@@ -42,8 +45,21 @@ contract KittyContract is Ownable, ERC721 {
         return kitties.length;
     }
 
-    function createKittyGen0(uint256 genes) public {
+    function getGen0Price() public view returns (uint256) {
+        return gen0Price;
+    }
+
+    function setGen0Price(uint256 price) public onlyOwner {
+        gen0Price = price;
+    }
+
+    function withdraw(uint256 amount) public onlyOwner {
+        payable(msg.sender).transfer(amount);
+    }
+
+    function createKittyGen0(uint256 genes) public payable {
         require(gen0Counter < CREATION_LIMIT_GEN0, "Gen0 creation over limit");
+        require((msg.sender != owner() || msg.sender != address(this)) && msg.value == gen0Price, "Invalid price");
 
         gen0Counter++;
 
@@ -67,33 +83,38 @@ contract KittyContract is Ownable, ERC721 {
         return newGen;
     }
 
-    function _mixDna(uint256 momId, uint256 dadId) private view returns (uint256) {
+    function _mixDna(uint256 momId, uint256 dadId) public view returns (uint256) {
+        // 11 22 33 44 55 66 77 88 99
         uint256 momDna = kitties[momId].genes;
         uint256 dadDna = kitties[dadId].genes;
-        // 11 22 33 44 55 66 77 88 99
-        uint256 zeroOrOne = random();
-        uint256 firstHalf;
-        uint256 secondHalf;
-        uint256 newDna;
 
-        if (zeroOrOne == 0) {
-            firstHalf = dadDna / 100000000;
-            secondHalf = momDna % 100000000;
-            newDna = firstHalf * 100000000;
-            newDna = newDna + secondHalf;
-            return newDna;
+        uint256[8] memory geneArray;
+
+        // binary 0-255
+        uint8 random = uint8(block.timestamp % 255);
+        uint256 index = 7;
+        for (uint256 i = 1; i <= 128; i = i * 2) {
+            if (random & i != 0) {
+                geneArray[index] = momDna % 100;
+            } else {
+                geneArray[index] = dadDna % 100;
+            }
+            momDna = momDna / 100;
+            dadDna = dadDna / 100;
+            if (index > 0) {
+                index = index - 1;
+            }
         }
 
-        firstHalf = momDna / 100000000;
-        secondHalf = dadDna % 100000000;
-        newDna = firstHalf * 100000000;
-        newDna = newDna + secondHalf;
-        return newDna;
-    }
+        uint256 newGene;
+        for (uint256 i = 0; i < 8; i++) {
+            newGene = newGene + geneArray[i];
+            if (i != 7) {
+                newGene = newGene * 100;
+            }
+        }
 
-    function random() private view returns (uint256) {
-        uint256 randomHash = uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp)));
-        return randomHash % 2;
+        return newGene;
     }
 
     function _createKitty(

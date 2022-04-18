@@ -7,7 +7,7 @@ import {
   useContractFunction,
   useEthers,
 } from "@usedapp/core";
-import { BigNumber, Contract } from "ethers";
+import { BigNumber, BigNumberish, Contract } from "ethers";
 import { Interface, isAddress } from "ethers/lib/utils";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
@@ -179,8 +179,26 @@ export const useContractNotification = ({
   }, [errorMessage, miningMessage, resetState, status, successMessage]);
 };
 
+export const useGen0Price = () => {
+  const contract = useKittyContract(false);
+
+  const { value, error } =
+    useCall({
+      contract,
+      method: "getGen0Price",
+      args: [],
+    }) ?? {};
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.error(error.message);
+  }
+
+  return useMemo(() => value?.[0], [value]);
+};
+
 export const useCreateGen0Kitty = (dna: DNA) => {
   const contract = useKittyContract();
+  const gen0Price = useGen0Price();
   const create = useContractFunction(contract, "createKittyGen0");
   const genes = useDnaToGenes(dna);
 
@@ -192,31 +210,37 @@ export const useCreateGen0Kitty = (dna: DNA) => {
     successMessage: `Success - create Gen0 Kitty with genes: ${genes.toString()}`,
   });
 
-  const onCreate = useCallback(() => create.send(genes), [create, genes]);
+  const onCreate = useCallback(() => {
+    if (!gen0Price) {
+      return;
+    }
+
+    return create.send(genes, { value: gen0Price });
+  }, [create, gen0Price, genes]);
 
   return useMemo(() => {
     return { ...create, onCreate };
   }, [create, onCreate]);
 };
 
-// export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
-//   const contract = useKittyContract();
-//   const breed = useContractFunction(contract, "breed");
+export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
+  const contract = useKittyContract();
+  const breed = useContractFunction(contract, "breed");
 
-//   useContractNotification({
-//     resetState: breed.resetState,
-//     status: breed.state.status,
-//     errorMessage: `Error - breeding \n${breed.state.errorMessage} `,
-//     miningMessage: `Loading - breed kitty...`,
-//     successMessage: `Success - breed kitty`,
-//   });
+  useContractNotification({
+    resetState: breed.resetState,
+    status: breed.state.status,
+    errorMessage: `Error - breeding \n${breed.state.errorMessage} `,
+    miningMessage: `Loading - breed kitty...`,
+    successMessage: `Success - breed kitty`,
+  });
 
-//   const onBreed = useCallback(
-//     () => breed.send(momId, dadId),
-//     [breed, dadId, momId]
-//   );
+  const onBreed = useCallback(
+    () => breed.send(momId, dadId),
+    [breed, dadId, momId]
+  );
 
-//   return useMemo(() => {
-//     return { ...breed, onBreed };
-//   }, [breed, onBreed]);
-// };
+  return useMemo(() => {
+    return { ...breed, onBreed };
+  }, [breed, onBreed]);
+};

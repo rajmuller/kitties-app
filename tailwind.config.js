@@ -18,6 +18,10 @@ module.exports = {
         link: "0px 6px 12px -12px rgb(0, 0, 0, 0.7);",
       },
       keyframes: {
+        loader: {
+          "0%": { transform: "rotate(0)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
         wiggle: {
           "0%": { transform: "rotate(0)" },
           "14%, 18%": { transform: "rotate(5deg)" },
@@ -56,6 +60,7 @@ module.exports = {
         },
       },
       animation: {
+        loader: "loader 1s linear infinite",
         wiggle: "wiggle 3s linear infinite",
         nod: "nod 4s linear infinite",
         slide: "slide 3s linear infinite",

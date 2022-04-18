@@ -1,9 +1,11 @@
+import { formatEther } from "ethers/lib/utils";
 import type { NextPage } from "next";
 import { ChangeEvent, useCallback, useState } from "react";
 import { GiChemicalDrop } from "react-icons/gi";
-import { Cat } from "../components";
+import { Cat, Logo, Spinner } from "../components";
 import { Button } from "../components/Ui";
-import { useCreateGen0Kitty } from "../lib/hooks";
+import { NATIVE_CURRENCY } from "../config";
+import { useChainId, useCreateGen0Kitty, useGen0Price } from "../lib/hooks";
 import { DNA, From10To15, From10To16, From10To19, From10To99 } from "../types";
 
 const generateRandom = (min = 0, max = 100) => {
@@ -28,6 +30,8 @@ const Factory: NextPage = () => {
   });
   const [tab, setTab] = useState<"colors" | "cattributes">("colors");
 
+  const price = useGen0Price();
+  const chainId = useChainId();
   const { onCreate } = useCreateGen0Kitty(dna);
 
   const onChange = useCallback(
@@ -57,7 +61,7 @@ const Factory: NextPage = () => {
       <div className="flex w-full flex-wrap items-center justify-center gap-16 py-12">
         <div className="rounded-md bg-rainbow p-1 shadow-xl">
           <div className="relative flex items-center justify-center rounded-md bg-white p-32 ">
-            <Cat dna={dna} className="scale-100" />
+            <Cat dna={dna} className="scale-[100%]" />
             <p className="absolute bottom-8 left-8 mt-4 text-3xl">
               {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
             </p>
@@ -65,9 +69,21 @@ const Factory: NextPage = () => {
         </div>
 
         <div className="rounded-2xl bg-white p-8 shadow-2xl">
-          <div className="mb-8 flex items-end gap-2">
-            <p className="text-4xl">Factory</p>
-            <GiChemicalDrop size={36} className="text-teal-400" />
+          <div className="mb-8 flex justify-between">
+            <div className="flex items-end gap-2">
+              <p className="text-4xl">Factory</p>
+              <GiChemicalDrop size={36} className="text-teal-400" />
+            </div>
+            <div className="flex items-center gap-2">
+              {price ? (
+                <>
+                  <Logo className="h-9 w-9" ticker={NATIVE_CURRENCY[chainId]} />
+                  <p className="text-3xl">{`${formatEther(price)}`}</p>
+                </>
+              ) : (
+                <Spinner />
+              )}
+            </div>
           </div>
           <div className="mb-8 flex w-full text-3xl">
             <button
@@ -263,7 +279,11 @@ const Factory: NextPage = () => {
             >
               Randomize
             </Button>
-            <Button onClick={onCreate} className="flex-1 bg-teal-400">
+            <Button
+              disabled={!price || !onCreate}
+              onClick={onCreate}
+              className="flex-1 bg-teal-400"
+            >
               Create
             </Button>
           </div>
