@@ -18,7 +18,7 @@ contract Marketplace is Ownable {
 
     Offer[] offers;
 
-    event MarketTransaction(string TxType, address owner, uint256 tokenId);
+    event MarketTransaction(string indexed TxType, address indexed owner, uint256 indexed tokenId);
 
     mapping(uint256 => Offer) tokenIdToOffer;
 

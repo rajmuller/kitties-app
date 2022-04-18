@@ -114,3 +114,25 @@ export const getCatsByBodyColor = gql`
     }
   }
 `;
+
+export const getOfferById = gql`
+  query getOfferById($id: ID!) {
+    offer(id: $id) {
+      id
+      user {
+        id
+      }
+      price
+      active
+      seller
+      cat {
+        id
+        owner {
+          id
+        }
+        approved
+        birthTime
+      }
+    }
+  }
+`;
