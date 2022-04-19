@@ -12,9 +12,9 @@ import { Interface, isAddress } from "ethers/lib/utils";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { CONTRACTS } from "../../config";
-import { DNA, KittyContract, Marketplace } from "../../types";
+import { DNA, KittyContract, MarketplaceContract } from "../../types";
 import KittyJson from "../abis/KittyContract.json";
-import MarketJson from "../abis/Marketplace.json";
+import MarketJson from "../abis/MarketplaceContract.json";
 
 const KittyContractInterface = new Interface(KittyJson.abi);
 const MarketplaceContractInterface = new Interface(MarketJson.abi);
@@ -100,7 +100,7 @@ const useMarketplaceContract = (withSignerIfPossible?: boolean) => {
     CONTRACTS[chainId].marketplace,
     MarketplaceContractInterface,
     withSignerIfPossible
-  ) as unknown as Marketplace;
+  ) as unknown as MarketplaceContract;
 
   return useMemo(() => marketplaceContract, [marketplaceContract]);
 };
@@ -209,23 +209,6 @@ export const useGen0Price = () => {
 
   return useMemo(() => value?.[0], [value]);
 };
-
-export const useAllTokenOnSale = () => {
-   const contract = useMarketplaceContract(false);
-
-   const { value, error } =
-   useCall({
-     contract,
-     method: "getAllTokenOnSale",
-     args: [],
-   }) ?? {};
- if (error) {
-   // eslint-disable-next-line no-console
-   console.error(error.message);
- }
-
- return useMemo(() => value?.[0], [value]);
-}
 
 export const useIsApprovedForAll = (address?: string | null) => {
   const contract = useKittyContract();

@@ -1,11 +1,12 @@
+import { log } from "@graphprotocol/graph-ts";
 import {
   KittyContract,
   Transfer as TransferEvent,
 } from "../generated/KittyContract/KittyContract";
 import {
-  Marketplace,
+  MarketplaceContract,
   MarketTransaction as MarketplaceTransactionEvent,
-} from "../generated/MarketplaceContract/Marketplace";
+} from "../generated/MarketplaceContract/MarketplaceContract";
 import { Cat, Dna, Offer, User } from "../generated/schema";
 
 export function handleTransfer(event: TransferEvent): void {
@@ -60,7 +61,7 @@ export function handleMarketTransaction(
 ): void {
   let offer = Offer.load(event.params.tokenId.toString());
   if (!offer) {
-    const contract = Marketplace.bind(event.address);
+    const contract = MarketplaceContract.bind(event.address);
     const _Offer = contract.getOffer(event.params.tokenId);
 
     offer = new Offer(event.params.tokenId.toString());
@@ -71,14 +72,16 @@ export function handleMarketTransaction(
   }
 
   offer.user = event.params.owner.toHexString();
+  log.info("txtType.toString: {}", [event.params.TxType.toString()]);
+  log.info("txtType.toHexString: {}", [event.params.TxType.toHexString()]);
 
-  if (event.params.TxType.toHexString() == "Create offer") {
+  if (event.params.TxType.toString() == "Create offer") {
     offer.active = true;
   }
-  if (event.params.TxType.toHexString() == "Buy") {
+  if (event.params.TxType.toString() == "Buy") {
     offer.active = false;
   }
-  if (event.params.TxType.toHexString() == "Remove offer") {
+  if (event.params.TxType.toString() == "Remove offer") {
     offer.active = false;
   }
 

@@ -5,7 +5,7 @@ import "hardhat/console.sol";
 import "./KittyContract.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Marketplace is Ownable {
+contract MarketplaceContract is Ownable {
     KittyContract private _kittyContract;
 
     struct Offer {
@@ -18,7 +18,7 @@ contract Marketplace is Ownable {
 
     Offer[] offers;
 
-    event MarketTransaction(string indexed TxType, address indexed owner, uint256 indexed tokenId);
+    event MarketTransaction(bytes32 indexed TxType, address indexed owner, uint256 indexed tokenId);
 
     mapping(uint256 => Offer) tokenIdToOffer;
 

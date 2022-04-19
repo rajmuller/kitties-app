@@ -101,7 +101,7 @@ const MyKitties = () => {
                 handleParentSet={handleParentSet}
                 key={id}
               >
-                <Cat dna={dna as DNA} />
+                <Cat dna={dna as DNA} className="scale-[60%]" />
                 <p className=" pl-2 text-xl text-neutral-500">
                   {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
                 </p>

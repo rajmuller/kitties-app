@@ -29,7 +29,7 @@ const Card = ({
   }, [id, router]);
 
   return (
-    <div className="relative flex flex-col justify-center gap-0.5 overflow-hidden rounded-md bg-rainbow p-0.5 shadow-lg">
+    <div className="relative flex flex-col justify-center gap-0.5 overflow-hidden rounded-md bg-rainbow p-0.5 shadow-xl">
       {isDam && <p className="pl-2">Dam</p>}
       {isSire && <p className="pl-2">Sire</p>}
       <motion.div
@@ -69,7 +69,7 @@ const Card = ({
         )}
 
         <Button onClick={onNavigate} className="mt-16 w-full bg-teal-500">
-          Check out
+          Sell
         </Button>
       </motion.div>
 

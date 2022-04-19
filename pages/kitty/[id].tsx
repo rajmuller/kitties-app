@@ -1,13 +1,17 @@
 import { useEthers } from "@usedapp/core";
 import { parseEther } from "ethers/lib/utils";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FaHashtag } from "react-icons/fa";
 import { GiDna1 } from "react-icons/gi";
 import { Button, Cat, Loader, Spinner } from "../../components";
 import { NATIVE_CURRENCY } from "../../config";
-import { useGetCatByIdQuery } from "../../lib/graphql/generated";
+import {
+  useGetCatByIdQuery,
+  useGetOfferByIdQuery,
+} from "../../lib/graphql/generated";
 import {
   useChainId,
   useCreateListing,
@@ -27,36 +31,62 @@ const Kitty: NextPage = () => {
   const address = account && account.toLowerCase();
 
   const chainId = useChainId();
+
   const isApprovedForAll = useIsApprovedForAll(account);
-  const { data, status } = useGetCatByIdQuery(
+  const { data: offerData, status: offerStatus } = useGetOfferByIdQuery(
+    { id: id as string },
+    { enabled: !!id }
+  );
+  const { data: catData, status: catStatus } = useGetCatByIdQuery(
     { id: id as string },
     { enabled: !!id }
   );
 
-  const { onApprove } = useSetApprovalForAll(true);
-  const { onCreateListing } = useCreateListing(parseEther(price || "0"), id);
+  console.log({ offerData });
 
-  const onClick = useCallback(() => {
-    if (!isApprovedForAll) {
-      return onApprove();
-    }
+  const { onApprove, state: approvalState } = useSetApprovalForAll(true);
+  const { onCreateListing, state: createState } = useCreateListing(
+    parseEther(price || "0"),
+    id
+  );
 
-    return onCreateListing();
-  }, [isApprovedForAll, onApprove, onCreateListing]);
-
-  if (status === "loading" || !data?.cat) {
+  if (catStatus === "loading") {
     return <Loader />;
   }
 
-  const isMine = address === data?.cat.owner.id;
-  const { dna } = data.cat;
+  if (!catData?.cat) {
+    return (
+      <main className="max-w-container mx-auto mt-16 flex flex-col items-center justify-center">
+        <div className="text-neutral-600">
+          <p className="mb-4 text-4xl text-black">
+            Oh Oh, this cat does not exist
+          </p>
+          <span>head over to </span>
+          <Link href="/factory">
+            <a className="text-3xl font-semibold text-teal-800">Factory</a>
+          </Link>
+          <span> to create a Gen0</span>
+          <p>Or</p>
+          <span>browse the </span>
+          <Link href="/catalogue">
+            <a className="text-3xl font-semibold text-teal-800">Catalogue</a>
+          </Link>
+          <span> to buy a cat for sale</span>
+        </div>
+      </main>
+    );
+  }
+
+  const isMine = address === catData?.cat.owner.id;
+  const onSale = offerData?.offer?.active;
+  const { dna } = catData.cat;
 
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex w-full flex-wrap items-center justify-center gap-16 py-12">
         <div className="rounded-md bg-rainbow p-1 shadow-2xl">
           <div className="relative flex items-center justify-center rounded-md bg-white p-32 ">
-            <Cat dna={dna as DNA} className="scale-105" />
+            <Cat dna={dna as DNA} className="scale-[105%]" />
             <p className="absolute bottom-8 left-8 mt-4 text-3xl">
               {`DNA: ${dna.bodyColor} ${dna.mouthTailColor} ${dna.eyeColor} ${dna.earPawColor} ${dna.eyeShape} ${dna.pattern} ${dna.patternColor} ${dna.animation}`}
             </p>
@@ -78,7 +108,7 @@ const Kitty: NextPage = () => {
             <div className="flex items-center gap-1 text-3xl text-neutral-500">
               <GiDna1 className="text-2xl" />
               <p>Gen</p>
-              <span className="text-4xl">{data.cat.generation}</span>
+              <span className="text-4xl">{catData.cat.generation}</span>
             </div>
           </div>
           <div className="mb-8 flex w-full text-3xl">
@@ -197,37 +227,69 @@ const Kitty: NextPage = () => {
             )}
           </div>
           <div className="mt-8 flex items-center justify-center gap-8">
-            {isApprovedForAll && (
-              <div className="relative flex-1 rounded-md border border-teal-500">
-                <input
-                  type="number"
-                  className="flex-1 bg-transparent py-2 pl-6 outline-teal-500"
-                  placeholder="Price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-                <div className="absolute right-2 bottom-0 mb-2">
-                  {NATIVE_CURRENCY[chainId]}
-                </div>
-              </div>
-            )}
-            {isApprovedForAll == undefined ? (
+            {isApprovedForAll == undefined && (
               <Button
                 disabled
                 className="flex flex-1 items-center justify-center capitalize text-teal-400"
               >
                 <Spinner />
               </Button>
-            ) : (
+            )}
+
+            {!isApprovedForAll && !onSale && isMine && (
               <Button
-                disabled={
-                  isApprovedForAll == undefined ||
-                  (isApprovedForAll && price <= "0")
-                }
-                onClick={onClick}
+                disabled={approvalState.status === "Mining"}
+                onClick={onApprove}
                 className="flex-1 bg-teal-400 capitalize"
               >
-                {isApprovedForAll ? "Sell" : "Approve to sell"}
+                Approve to sell
+              </Button>
+            )}
+
+            {isApprovedForAll && !onSale && (
+              <>
+                <div className="relative flex-1 rounded-md border border-teal-500">
+                  <input
+                    type="number"
+                    className="flex-1 bg-transparent py-2 pl-6 outline-teal-500"
+                    placeholder="Price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                  <div className="absolute right-2 bottom-0 mb-2">
+                    {NATIVE_CURRENCY[chainId]}
+                  </div>
+                </div>
+                <Button
+                  disabled={
+                    createState.status === "Mining" ||
+                    (isApprovedForAll && price <= "0")
+                  }
+                  onClick={onCreateListing}
+                  className="flex-1 bg-teal-400 capitalize"
+                >
+                  Sell
+                </Button>
+              </>
+            )}
+
+            {onSale && !isMine && (
+              <Button
+                disabled
+                // onClick={onBuy}
+                className="flex-1 bg-teal-400 capitalize"
+              >
+                Buy Kitty
+              </Button>
+            )}
+
+            {onSale && isMine && (
+              <Button
+                disabled
+                // onClick={onRemoveListing}
+                className="flex-1 bg-teal-400 capitalize"
+              >
+                Remove Listing
               </Button>
             )}
           </div>

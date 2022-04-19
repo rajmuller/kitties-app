@@ -22,7 +22,6 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface KittyContractInterface extends ethers.utils.Interface {
   functions: {
-    "_mixDna(uint256,uint256)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "breed(uint256,uint256)": FunctionFragment;
@@ -47,10 +46,6 @@ interface KittyContractInterface extends ethers.utils.Interface {
     "withdraw(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "_mixDna",
-    values: [BigNumberish, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -128,7 +123,6 @@ interface KittyContractInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "_mixDna", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "breed", data: BytesLike): Result;
@@ -275,12 +269,6 @@ export class KittyContract extends BaseContract {
   interface: KittyContractInterface;
 
   functions: {
-    _mixDna(
-      momId: BigNumberish,
-      dadId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -397,12 +385,6 @@ export class KittyContract extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  _mixDna(
-    momId: BigNumberish,
-    dadId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   approve(
     to: string,
     tokenId: BigNumberish,
@@ -513,12 +495,6 @@ export class KittyContract extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    _mixDna(
-      momId: BigNumberish,
-      dadId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -710,12 +686,6 @@ export class KittyContract extends BaseContract {
   };
 
   estimateGas: {
-    _mixDna(
-      momId: BigNumberish,
-      dadId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -825,12 +795,6 @@ export class KittyContract extends BaseContract {
   };
 
   populateTransaction: {
-    _mixDna(
-      momId: BigNumberish,
-      dadId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     approve(
       to: string,
       tokenId: BigNumberish,

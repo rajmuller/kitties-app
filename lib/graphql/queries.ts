@@ -40,6 +40,9 @@ export const getCatById = gql`
       momId
       dadId
       genes
+      offer {
+        id
+      }
       generation
       dna {
         id

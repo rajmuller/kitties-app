@@ -5,7 +5,7 @@ async function main() {
   const kittyContract = await KittyContract.deploy();
   await kittyContract.deployed();
 
-  const MarketplaceContract = await ethers.getContractFactory("Marketplace");
+  const MarketplaceContract = await ethers.getContractFactory("MarketplaceContract");
   const marketplaceContract = await MarketplaceContract.deploy(kittyContract.address);
   await marketplaceContract.deployed();
 

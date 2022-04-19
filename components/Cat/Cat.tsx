@@ -20,7 +20,7 @@ const Cat = ({ dna, className }: CatProps) => {
   } = dna;
 
   return (
-    <div className={`cat scale-[60%] ${className}`}>
+    <div className={className}>
       <div className="cat__ear">
         <div
           id="leftEar"

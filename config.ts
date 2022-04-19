@@ -2,8 +2,8 @@ import { ChainId } from "@usedapp/core";
 
 export const CONTRACTS = {
   [ChainId.Mumbai]: {
-    kitty: "0x049d8ed690800dF2ABe533808cDAe811C79D7dCf",
-    marketplace: "0x84c9e2FB685B6Cb9Bc94F47DdF8E856617505452",
+    kitty: "0x79179d8B8ac086D62CfB8dF9159240870F53765B",
+    marketplace: "0x1dF03680b34591FfEE19C51529941B699E418FB0",
   },
   [ChainId.Polygon]: {
     kitty: "test",

@@ -20,7 +20,7 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface MarketplaceInterface extends ethers.utils.Interface {
+interface MarketplaceContractInterface extends ethers.utils.Interface {
   functions: {
     "buyKitty(uint256)": FunctionFragment;
     "getAllTokenOnSale()": FunctionFragment;
@@ -93,7 +93,7 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "MarketTransaction(string,address,uint256)": EventFragment;
+    "MarketTransaction(bytes32,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
@@ -113,7 +113,7 @@ export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
 >;
 
-export class Marketplace extends BaseContract {
+export class MarketplaceContract extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -154,7 +154,7 @@ export class Marketplace extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MarketplaceInterface;
+  interface: MarketplaceContractInterface;
 
   functions: {
     buyKitty(
@@ -299,19 +299,19 @@ export class Marketplace extends BaseContract {
   };
 
   filters: {
-    "MarketTransaction(string,address,uint256)"(
-      TxType?: null,
-      owner?: null,
-      tokenId?: null
+    "MarketTransaction(bytes32,address,uint256)"(
+      TxType?: BytesLike | null,
+      owner?: string | null,
+      tokenId?: BigNumberish | null
     ): TypedEventFilter<
       [string, string, BigNumber],
       { TxType: string; owner: string; tokenId: BigNumber }
     >;
 
     MarketTransaction(
-      TxType?: null,
-      owner?: null,
-      tokenId?: null
+      TxType?: BytesLike | null,
+      owner?: string | null,
+      tokenId?: BigNumberish | null
     ): TypedEventFilter<
       [string, string, BigNumber],
       { TxType: string; owner: string; tokenId: BigNumber }
