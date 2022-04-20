@@ -1,3 +1,5 @@
+import { BigNumberish } from "ethers";
+import { formatEther } from "ethers/lib/utils";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { ReactNode, useCallback } from "react";
@@ -10,6 +12,8 @@ type CardProps = {
   generation: string;
   isDam?: boolean;
   isSire?: boolean;
+  owned?: boolean;
+  price?: BigNumberish;
   handleParentSet?: (id: string, role: "dam" | "sire") => void;
   children?: ReactNode;
 };
@@ -21,6 +25,8 @@ const Card = ({
   handleParentSet,
   isDam,
   isSire,
+  owned,
+  price
 }: CardProps) => {
   const router = useRouter();
 
@@ -30,8 +36,14 @@ const Card = ({
 
   return (
     <div className="relative flex flex-col justify-center gap-0.5 overflow-hidden rounded-md bg-rainbow p-0.5 shadow-xl">
-      {isDam && <p className="pl-2">Dam</p>}
-      {isSire && <p className="pl-2">Sire</p>}
+      {isDam && <p className="pl-2 uppercase">Dam</p>}
+      {isSire && <p className="pl-2 uppercase">Sire</p>}
+      {owned && <p className="pl-2 uppercase">Owned</p>}
+      {price && (
+        <p className="absolute top-10 left-1/2 -translate-x-1/2 rounded-full bg-teal-100 px-3 py-1 text-xl">
+          {`Price ${formatEther(price)}`}
+        </p>
+      )}
       <motion.div
         whileHover={{ opacity: 1 }}
         transition={{
@@ -69,7 +81,7 @@ const Card = ({
         )}
 
         <Button onClick={onNavigate} className="mt-16 w-full bg-teal-500">
-          Sell
+          Check Out
         </Button>
       </motion.div>
 

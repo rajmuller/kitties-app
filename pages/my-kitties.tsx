@@ -62,8 +62,8 @@ const MyKitties = () => {
           <span> to create a Gen0</span>
           <p>Or</p>
           <span>browse the </span>
-          <Link href="/catalogue">
-            <a className="text-3xl font-semibold text-teal-800">Catalogue</a>
+          <Link href="/market">
+            <a className="text-3xl font-semibold text-teal-800">Market</a>
           </Link>
           <span> to buy a cat for sale</span>
         </div>

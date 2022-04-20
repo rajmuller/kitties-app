@@ -139,3 +139,34 @@ export const getOfferById = gql`
     }
   }
 `;
+
+export const getOffers = gql`
+  query getOffers {
+    offers(where: { active: true }) {
+      id
+      user {
+        id
+      }
+      price
+      active
+      seller
+      cat {
+        id
+        generation
+        approved
+        birthTime
+        dna {
+          bodyColor
+          mouthTailColor
+          eyeColor
+          earPawColor
+          eyeShape
+          pattern
+          patternColor
+          animation
+          secret
+        }
+      }
+    }
+  }
+`;

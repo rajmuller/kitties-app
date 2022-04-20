@@ -30,14 +30,14 @@ const Kitty: NextPage = () => {
   const id = router.query.id as string | undefined;
 
   const { account } = useEthers();
-  const address = account && account.toLowerCase();
+  const address = account?.toLowerCase();
 
   const chainId = useChainId();
 
   const isApprovedForAll = useIsApprovedForAll(account);
   const { data: offerData } = useGetOfferByIdQuery(
     { id: id as string },
-    { enabled: !!id }
+    { enabled: !!id, refetchInterval: 1000 }
   );
   const { data: catData, status: catStatus } = useGetCatByIdQuery(
     { id: id as string },
@@ -69,8 +69,8 @@ const Kitty: NextPage = () => {
           <span> to create a Gen0</span>
           <p>Or</p>
           <span>browse the </span>
-          <Link href="/catalogue">
-            <a className="text-3xl font-semibold text-teal-800">Catalogue</a>
+          <Link href="/market">
+            <a className="text-3xl font-semibold text-teal-800">Market</a>
           </Link>
           <span> to buy a cat for sale</span>
         </div>
@@ -107,7 +107,7 @@ const Kitty: NextPage = () => {
             )}
 
             {!isMine && onSale && (
-              <div className="absolute -top-8 left-1/2 flex -translate-x-1/2 border border-rain items-center gap-2 rounded-md px-6 py-2 text-5xl uppercase shadow-xl">
+              <div className="border-rain absolute -top-8 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-md border px-6 py-2 text-5xl uppercase shadow-xl">
                 <Logo className="h-8 w-8" ticker={NATIVE_CURRENCY[chainId]} />
                 <span>{formatEther(offerData.offer?.price)}</span>
               </div>

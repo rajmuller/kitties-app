@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
 import NextLink from "next/link";
 import { ReactNode } from "react";
 import { WalletButton } from "../Wallet";
@@ -23,13 +24,19 @@ const Header = () => {
     <header className="flex w-full flex-col items-center justify-center">
       <div className="max-w-container flex h-16 w-full items-center justify-between">
         <NextLink href="/">
-          <a>Logo</a>
+          <a className="relative h-16 w-16">
+            <Image
+              src="/cat.png"
+              alt="cat logo"
+              layout="fill"
+              objectFit="cover"
+            />
+          </a>
         </NextLink>
 
         <nav>
           <ul className="flex items-center justify-center gap-8">
             <Link href="/">Home</Link>
-            <Link href="/cataloge">Catalogue</Link>
             <Link href="/market">Market</Link>
             <Link href="/my-kitties">My Kitties</Link>
             <Link href="/factory">Factory</Link>
