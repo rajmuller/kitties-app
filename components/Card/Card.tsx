@@ -26,7 +26,7 @@ const Card = ({
   isDam,
   isSire,
   owned,
-  price
+  price,
 }: CardProps) => {
   const router = useRouter();
 
@@ -40,7 +40,7 @@ const Card = ({
       {isSire && <p className="pl-2 uppercase">Sire</p>}
       {owned && <p className="pl-2 uppercase">Owned</p>}
       {price && (
-        <p className="absolute top-10 left-1/2 -translate-x-1/2 rounded-full bg-teal-100 px-3 py-1 text-xl">
+        <p className="absolute bottom-12 left-1/2 -translate-x-1/2 rounded-full bg-teal-100 px-3 py-1 text-xl">
           {`Price ${formatEther(price)}`}
         </p>
       )}

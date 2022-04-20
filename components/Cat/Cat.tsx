@@ -16,7 +16,6 @@ const Cat = ({ dna, className }: CatProps) => {
     mouthTailColor,
     pattern,
     patternColor,
-    secret,
   } = dna;
 
   return (

@@ -44,8 +44,6 @@ const Kitty: NextPage = () => {
     { enabled: !!id }
   );
 
-  console.log({ offerData });
-
   const { onApprove, state: approvalState } = useSetApprovalForAll(true);
   const { onCreateListing, state: createState } = useCreateListing(price, id);
   const { onRemoveListing, state: removeState } = useRemoveListing(id);

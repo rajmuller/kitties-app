@@ -1,6 +1,5 @@
 import { useEthers } from "@usedapp/core";
 import { HTMLAttributes, useCallback } from "react";
-import { useNetworkHelper } from "../../lib/hooks";
 import { Button } from "../Ui";
 import { useModal } from "./hooks";
 
@@ -11,7 +10,6 @@ type ButtonProps = {
 const WalletButton = ({ className }: ButtonProps) => {
   const { setIsOpen } = useModal();
   const { activateBrowserWallet, account } = useEthers();
-  const { changeOrAddNetwork } = useNetworkHelper();
 
   const onClick = useCallback(() => {
     if (account && setIsOpen) {
