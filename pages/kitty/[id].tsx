@@ -1,21 +1,23 @@
 import { useEthers } from "@usedapp/core";
-import { parseEther } from "ethers/lib/utils";
+import { formatEther } from "ethers/lib/utils";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FaHashtag } from "react-icons/fa";
 import { GiDna1 } from "react-icons/gi";
-import { Button, Cat, Loader, Spinner } from "../../components";
+import { Button, Cat, Loader, Logo, Spinner } from "../../components";
 import { NATIVE_CURRENCY } from "../../config";
 import {
   useGetCatByIdQuery,
   useGetOfferByIdQuery,
 } from "../../lib/graphql/generated";
 import {
+  useBuyKitty,
   useChainId,
   useCreateListing,
   useIsApprovedForAll,
+  useRemoveListing,
   useSetApprovalForAll,
 } from "../../lib/hooks";
 import { DNA } from "../../types";
@@ -33,7 +35,7 @@ const Kitty: NextPage = () => {
   const chainId = useChainId();
 
   const isApprovedForAll = useIsApprovedForAll(account);
-  const { data: offerData, status: offerStatus } = useGetOfferByIdQuery(
+  const { data: offerData } = useGetOfferByIdQuery(
     { id: id as string },
     { enabled: !!id }
   );
@@ -45,10 +47,9 @@ const Kitty: NextPage = () => {
   console.log({ offerData });
 
   const { onApprove, state: approvalState } = useSetApprovalForAll(true);
-  const { onCreateListing, state: createState } = useCreateListing(
-    parseEther(price || "0"),
-    id
-  );
+  const { onCreateListing, state: createState } = useCreateListing(price, id);
+  const { onRemoveListing, state: removeState } = useRemoveListing(id);
+  const { onBuy, state: buyState } = useBuyKitty(offerData?.offer?.price, id);
 
   if (catStatus === "loading") {
     return <Loader />;
@@ -101,7 +102,14 @@ const Kitty: NextPage = () => {
 
             {isMine && (
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 -rotate-[12deg] bg-rainbow px-6 py-2 text-5xl uppercase text-white shadow-xl">
-                Owned
+                {onSale ? "Listed" : "Owned"}
+              </div>
+            )}
+
+            {!isMine && onSale && (
+              <div className="absolute -top-8 left-1/2 flex -translate-x-1/2 border border-rain items-center gap-2 rounded-md px-6 py-2 text-5xl uppercase shadow-xl">
+                <Logo className="h-8 w-8" ticker={NATIVE_CURRENCY[chainId]} />
+                <span>{formatEther(offerData.offer?.price)}</span>
               </div>
             )}
 
@@ -227,7 +235,7 @@ const Kitty: NextPage = () => {
             )}
           </div>
           <div className="mt-8 flex items-center justify-center gap-8">
-            {isApprovedForAll == undefined && (
+            {isApprovedForAll == undefined && !onSale && (
               <Button
                 disabled
                 className="flex flex-1 items-center justify-center capitalize text-teal-400"
@@ -238,7 +246,9 @@ const Kitty: NextPage = () => {
 
             {!isApprovedForAll && !onSale && isMine && (
               <Button
-                disabled={approvalState.status === "Mining"}
+                disabled={["Mining", "PendingSignature"].includes(
+                  approvalState.status
+                )}
                 onClick={onApprove}
                 className="flex-1 bg-teal-400 capitalize"
               >
@@ -262,8 +272,8 @@ const Kitty: NextPage = () => {
                 </div>
                 <Button
                   disabled={
-                    createState.status === "Mining" ||
-                    (isApprovedForAll && price <= "0")
+                    price <= "0" ||
+                    ["Mining", "PendingSignature"].includes(createState.status)
                   }
                   onClick={onCreateListing}
                   className="flex-1 bg-teal-400 capitalize"
@@ -275,8 +285,11 @@ const Kitty: NextPage = () => {
 
             {onSale && !isMine && (
               <Button
-                disabled
-                // onClick={onBuy}
+                disabled={
+                  !offerData.offer?.price ||
+                  ["Mining", "PendingSignature"].includes(buyState.status)
+                }
+                onClick={onBuy}
                 className="flex-1 bg-teal-400 capitalize"
               >
                 Buy Kitty
@@ -285,8 +298,10 @@ const Kitty: NextPage = () => {
 
             {onSale && isMine && (
               <Button
-                disabled
-                // onClick={onRemoveListing}
+                onClick={onRemoveListing}
+                disabled={["Mining", "PendingSignature"].includes(
+                  removeState.status
+                )}
                 className="flex-1 bg-teal-400 capitalize"
               >
                 Remove Listing

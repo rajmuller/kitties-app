@@ -8,7 +8,7 @@ import {
   useEthers,
 } from "@usedapp/core";
 import { BigNumber, BigNumberish, Contract } from "ethers";
-import { Interface, isAddress } from "ethers/lib/utils";
+import { Interface, isAddress, parseEther } from "ethers/lib/utils";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { CONTRACTS } from "../../config";
@@ -156,11 +156,10 @@ export const useContractNotification = ({
   const toastRef = useRef("");
 
   useEffect(() => {
-    resetState();
-
     switch (status) {
       case "Exception":
       case "Fail": {
+        resetState();
         if (!errorMessage) return;
 
         const toastId = toast.error(errorMessage, {
@@ -180,6 +179,7 @@ export const useContractNotification = ({
       }
 
       case "Success": {
+        resetState();
         if (!successMessage) return;
 
         const toastId = toast.success(successMessage, {
@@ -257,7 +257,7 @@ export const useSetApprovalForAll = (approved: boolean | null) => {
 };
 
 export const useCreateListing = (
-  price?: BigNumberish,
+  price?: string,
   tokenId?: BigNumberish
 ) => {
   const contract = useMarketplaceContract();
@@ -276,12 +276,37 @@ export const useCreateListing = (
       return;
     }
 
-    return createListing.send(price, tokenId);
+    return createListing.send(parseEther(price), tokenId);
   }, [createListing, price, tokenId]);
 
   return useMemo(() => {
     return { ...createListing, onCreateListing };
   }, [createListing, onCreateListing]);
+};
+
+export const useRemoveListing = (tokenId?: BigNumberish) => {
+  const contract = useMarketplaceContract();
+  const removeListing = useContractFunction(contract, "removeOffer");
+
+  useContractNotification({
+    resetState: removeListing.resetState,
+    status: removeListing.state.status,
+    errorMessage: `Error - remove listing \n${removeListing.state.errorMessage} `,
+    miningMessage: `Loading - remove listing`,
+    successMessage: `Success - remove listing`,
+  });
+
+  const onRemoveListing = useCallback(() => {
+    if (!tokenId) {
+      return;
+    }
+
+    return removeListing.send(tokenId);
+  }, [removeListing, tokenId]);
+
+  return useMemo(() => {
+    return { ...removeListing, onRemoveListing };
+  }, [removeListing, onRemoveListing]);
 };
 
 export const useCreateGen0Kitty = (dna: DNA) => {
@@ -331,4 +356,29 @@ export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
   return useMemo(() => {
     return { ...breed, onBreed };
   }, [breed, onBreed]);
+};
+
+export const useBuyKitty = (price?: BigNumberish, tokenId?: BigNumberish) => {
+  const contract = useMarketplaceContract();
+  const buy = useContractFunction(contract, "buyKitty");
+
+  useContractNotification({
+    resetState: buy.resetState,
+    status: buy.state.status,
+    errorMessage: `Error - buy kitty \n${buy.state.errorMessage} `,
+    miningMessage: `Loading - buy kitty...`,
+    successMessage: `Success - buy kitty`,
+  });
+
+  const onBuy = useCallback(() => {
+    if (!tokenId || !price) {
+      return;
+    }
+
+    buy.send(tokenId, {value: price});
+  }, [buy, price, tokenId]);
+
+  return useMemo(() => {
+    return { ...buy, onBuy };
+  }, [buy, onBuy]);
 };
