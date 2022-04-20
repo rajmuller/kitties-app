@@ -2,6 +2,7 @@ import { ReactNode, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Header from "./Header";
 import { WalletModal, WalletModalContext } from "./Wallet";
+import NetworkModal from "./Wallet/NetworkModal";
 
 type LayoutProps = {
   children?: ReactNode;
@@ -23,6 +24,7 @@ const Layout = ({ children }: LayoutProps) => {
         position="bottom-center"
       />
       <WalletModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <NetworkModal />
     </WalletModalContext.Provider>
   );
 };

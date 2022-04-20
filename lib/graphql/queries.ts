@@ -170,3 +170,25 @@ export const getOffers = gql`
     }
   }
 `;
+
+export const getOffersByIds = gql`
+  query getOffersByIds($ids: [ID!]!) {
+    offers(where: { id_in: $ids }) {
+      id
+      user {
+        id
+      }
+      price
+      active
+      seller
+      cat {
+        id
+        owner {
+          id
+        }
+        approved
+        birthTime
+      }
+    }
+  }
+`;

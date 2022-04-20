@@ -88,7 +88,7 @@ const useKittyContract = (withSignerIfPossible?: boolean) => {
     CONTRACTS[chainId].kitty,
     KittyContractInterface,
     withSignerIfPossible
-  ) as unknown as KittyContract;
+  ) as unknown as KittyContract | null;
 
   return useMemo(() => kittiContract, [kittiContract]);
 };
@@ -100,7 +100,7 @@ const useMarketplaceContract = (withSignerIfPossible?: boolean) => {
     CONTRACTS[chainId].marketplace,
     MarketplaceContractInterface,
     withSignerIfPossible
-  ) as unknown as MarketplaceContract;
+  ) as unknown as MarketplaceContract | null;
 
   return useMemo(() => marketplaceContract, [marketplaceContract]);
 };
@@ -197,11 +197,13 @@ export const useGen0Price = () => {
   const contract = useKittyContract(false);
 
   const { value, error } =
-    useCall({
-      contract,
-      method: "getGen0Price",
-      args: [],
-    }) ?? {};
+    useCall(
+      contract && {
+        contract,
+        method: "getGen0Price",
+        args: [],
+      }
+    ) ?? {};
   if (error) {
     // eslint-disable-next-line no-console
     console.error(error.message);
@@ -215,11 +217,12 @@ export const useIsApprovedForAll = (address?: string | null) => {
   const chainId = useChainId();
   const { value, error } =
     useCall(
-      address && {
-        contract,
-        method: "isApprovedForAll",
-        args: [address, CONTRACTS[chainId].marketplace],
-      }
+      address &&
+        contract && {
+          contract,
+          method: "isApprovedForAll",
+          args: [address, CONTRACTS[chainId].marketplace],
+        }
     ) ?? {};
   if (error) {
     // eslint-disable-next-line no-console
@@ -233,7 +236,10 @@ export const useSetApprovalForAll = (approved: boolean | null) => {
   const contract = useKittyContract();
   const chainId = useChainId();
   const address = CONTRACTS[chainId].marketplace;
-  const approve = useContractFunction(contract, "setApprovalForAll");
+  const approve = useContractFunction(
+    contract as KittyContract,
+    "setApprovalForAll"
+  );
 
   useContractNotification({
     resetState: approve.resetState,
@@ -256,12 +262,12 @@ export const useSetApprovalForAll = (approved: boolean | null) => {
   }, [approve, onApprove]);
 };
 
-export const useCreateListing = (
-  price?: string,
-  tokenId?: BigNumberish
-) => {
+export const useCreateListing = (price?: string, tokenId?: BigNumberish) => {
   const contract = useMarketplaceContract();
-  const createListing = useContractFunction(contract, "setOffer");
+  const createListing = useContractFunction(
+    contract as MarketplaceContract,
+    "setOffer"
+  );
 
   useContractNotification({
     resetState: createListing.resetState,
@@ -286,7 +292,10 @@ export const useCreateListing = (
 
 export const useRemoveListing = (tokenId?: BigNumberish) => {
   const contract = useMarketplaceContract();
-  const removeListing = useContractFunction(contract, "removeOffer");
+  const removeListing = useContractFunction(
+    contract as MarketplaceContract,
+    "removeOffer"
+  );
 
   useContractNotification({
     resetState: removeListing.resetState,
@@ -312,7 +321,10 @@ export const useRemoveListing = (tokenId?: BigNumberish) => {
 export const useCreateGen0Kitty = (dna: DNA) => {
   const contract = useKittyContract();
   const gen0Price = useGen0Price();
-  const create = useContractFunction(contract, "createKittyGen0");
+  const create = useContractFunction(
+    contract as KittyContract,
+    "createKittyGen0"
+  );
   const genes = useDnaToGenes(dna);
 
   useContractNotification({
@@ -338,7 +350,7 @@ export const useCreateGen0Kitty = (dna: DNA) => {
 
 export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
   const contract = useKittyContract();
-  const breed = useContractFunction(contract, "breed");
+  const breed = useContractFunction(contract as KittyContract, "breed");
 
   useContractNotification({
     resetState: breed.resetState,
@@ -360,7 +372,7 @@ export const useBreed = (momId: BigNumberish, dadId: BigNumberish) => {
 
 export const useBuyKitty = (price?: BigNumberish, tokenId?: BigNumberish) => {
   const contract = useMarketplaceContract();
-  const buy = useContractFunction(contract, "buyKitty");
+  const buy = useContractFunction(contract as MarketplaceContract, "buyKitty");
 
   useContractNotification({
     resetState: buy.resetState,
@@ -375,7 +387,7 @@ export const useBuyKitty = (price?: BigNumberish, tokenId?: BigNumberish) => {
       return;
     }
 
-    buy.send(tokenId, {value: price});
+    buy.send(tokenId, { value: price });
   }, [buy, price, tokenId]);
 
   return useMemo(() => {

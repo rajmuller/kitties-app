@@ -34,7 +34,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
 
   const onNavigate = useCallback(() => {
     setIsOpen(false);
-    push("/breed");
+    push("/my-kitties");
   }, [push, setIsOpen]);
 
   return (
