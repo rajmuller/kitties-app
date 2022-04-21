@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
     "codegen": "DOTENV_CONFIG_PATH=./.env.development graphql-codegen -r dotenv/config",
