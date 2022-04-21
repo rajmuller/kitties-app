@@ -1,23 +1,35 @@
-# Next.js + Tailwind CSS Example
+# Rein Kitties
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+## Full Stack Web3 App
 
-## Deploy your own
+Trade, create, breed kitties on Mumbai! NFT Game inspired by CryptoKitties using modern fullstack web3 technologies.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+## Resources
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+[Check out the subgraph repo](https://github.com/AdamReinmuller/kitties-subgraph)
+[Check out the smart contract repo](https://github.com/AdamReinmuller/kitties-contract)
+
+## Tech stack
+
+- The Graph
+- Hardhat
+- NextJS
+- EthersJS
+- UseDapp
+- React Query
+- Tailwind
 
 ## How to use
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+- [Get test MATIC](https://faucet.polygon.technology/)
+- Use the builtin helper to add/switch to mumbai network
+- Enjoy
 
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-# or
-pnpm create next-app -- --example with-tailwindcss with-tailwindcss-app
-```
+## Further improvements
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+1. Refactor
+2. Mobile view
+3. Breed price
+4. More detailed kitty/id profile
+5. Logging and Transaction tracking like: previous owners
+6. Design overhaul
