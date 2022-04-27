@@ -26,10 +26,10 @@ const Header = () => {
         <NextLink href="/">
           <a className="relative h-16 w-16">
             <Image
-              src="/cat.png"
+              src="/logo.png"
               alt="cat logo"
               layout="fill"
-              objectFit="cover"
+              objectFit="contain"
             />
           </a>
         </NextLink>

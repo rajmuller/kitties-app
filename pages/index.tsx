@@ -10,10 +10,23 @@ const Home: NextPage = () => {
   const { push } = useRouter();
 
   return (
-    <main className="flex h-screen items-center justify-center">
-      <div className="relative flex w-full flex-col flex-wrap items-center justify-center gap-8 bg-teal-100 py-24">
-        <span className="text-7xl">Welcome to Rein Kitties</span>
-        <Image src="/cats/welcome.png" width={962} height={276} alt="cat1" />
+    <main className="relative mt-16 flex min-h-[calc(100vh_-_131px)] items-start justify-center">
+      <div className="absolute top-0 left-0 h-full w-full bg-[url('/rainbow.png')] bg-center bg-no-repeat opacity-20" />
+      <div className="relative flex w-full flex-col flex-wrap items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-9xl">Rein Kitties</p>
+          <p className="text-4xl text-neutral-600">
+            Collect and Breed Furry Friends
+          </p>
+        </div>
+        <div className="relative w-full max-w-4xl pt-[20%]">
+          <Image
+            src="/cat-home.png"
+            layout="fill"
+            objectFit="contain"
+            alt="cats"
+          />
+        </div>
         {account ? (
           <Button
             onClick={() => push("/market")}
