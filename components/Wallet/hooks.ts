@@ -2,13 +2,10 @@ import copy from "copy-to-clipboard";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { ModalContext } from "./context";
 
-export const useCopyClipboard = (
-  timeout = 500
-  // eslint-disable-next-line no-unused-vars
-) => {
+export const useCopyClipboard = (timeout = 500) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const staticCopy = useCallback((text) => {
+  const staticCopy = useCallback((text: string) => {
     const didCopy = copy(text);
     setIsCopied(didCopy);
   }, []);

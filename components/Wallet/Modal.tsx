@@ -28,7 +28,7 @@ const Modal = ({ isOpen, setIsOpen }: ModalProps) => {
   const { staticCopy } = useCopyClipboard();
 
   const onCopy = useCallback(() => {
-    staticCopy(account);
+    staticCopy(account || "");
     toast.success("Address copied to clipboard");
   }, [account, staticCopy]);
 
