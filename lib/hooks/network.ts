@@ -25,28 +25,17 @@ export const SUPPORTED_NETWORKS: Record<
     rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
     blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
   },
-  // [ChainId.Polygon]: {
-  //   chainId: "0x89",
-  //   chainName: "Polygon",
-  //   nativeCurrency: {
-  //     name: "Matic",
-  //     symbol: "MATIC",
-  //     decimals: 18,
-  //   },
-  //   rpcUrls: ["https://matic-mainnet.chainstacklabs.com"],
-  //   blockExplorerUrls: ["https://polygonscan.com"],
-  // },
 };
 
 export const useNetworkHelper = () => {
-  const { library, account, chainId } = useEthers();
+  const { library, account } = useEthers();
 
-  if (!account || !chainId || !library) {
+  if (!account || !library) {
     return { changeOrAddNetwork: undefined };
   }
 
-  const params = SUPPORTED_NETWORKS[chainId];
   const changeOrAddNetwork = async (chainId: ChainId) => {
+    const params = SUPPORTED_NETWORKS[chainId];
     try {
       await library.send("wallet_switchEthereumChain", [
         { chainId: SUPPORTED_NETWORKS[chainId].chainId },
@@ -56,7 +45,7 @@ export const useNetworkHelper = () => {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
-          await library?.send("wallet_addEthereumChain", [params, account]);
+          await library.send("wallet_addEthereumChain", [params, account]);
         } catch (addError) {
           // handle "add" error
           // eslint-disable-next-line no-console
